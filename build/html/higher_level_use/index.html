@@ -58,21 +58,21 @@
 <li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">介绍</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../introduction/tru_synapse_framework.html">TruSynapse 框架</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../introduction/tru_synapse_framework.html#id1">琴枢微处理器简介</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../introduction/tru_synapse_framework.html#id2">TruSynapse 框架定位与目标</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../introduction/tru_synapse_framework.html#id3">软件架构与层次视图</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../introduction/tru_synapse_framework.html#id2">软件架构与层次视图</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../introduction/tru_synapse_framework.html#id3">TruSynapse 框架定位与目标</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../introduction/foundational_concepts/index.html">基础概念</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../introduction/foundational_concepts/data_organization_and_compression.html">神经网络数据组织与压缩</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../introduction/foundational_concepts/data_organization_and_compression.html#id2">数据类型</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../introduction/foundational_concepts/data_organization_and_compression.html#id3">连接关系压缩与存储方式</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../introduction/foundational_concepts/data_organization_and_compression.html#id3">存储与压缩</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../introduction/foundational_concepts/data_organization_and_compression.html#trusynapse">传统表示与 TruSynapse 方案</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../introduction/foundational_concepts/subnet_executor.html">子网执行体</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../introduction/foundational_concepts/subnet_executor.html#id2">子网执行体概述</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../introduction/foundational_concepts/subnet_executor.html#id3">子网执行体结构</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../introduction/foundational_concepts/subnet_executor.html#snndata">子网执行体数据结构SNNData</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../introduction/foundational_concepts/subnet_executor.html#id4">子网执行体内存管理</a></li>
 </ul>
 </li>
 </ul>
@@ -93,23 +93,25 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../getting_started/run_a_net.html">全栈神经网络运行</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#id2">全栈神经网络介绍</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#id3">构建神经网络</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#id4">转换连接关系数据</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#spike">输入spike数据</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#frameworknfu">调用framework构造NFU子网执行体</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#nfu">执行NFU子网执行体</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#id2">概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#id3">前置条件</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#net">1. 构建神经网络（net）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#connections">2. 转换连接关系数据（connections）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#inputdata">3. 准备输入脉冲（inputdata）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#nfu">4. 构造 NFU 子网执行体</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#id4">5. 执行 NFU 子网并获取输出</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../getting_started/run_a_net.html#id5">外源神经网络应用</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#id6">外源神经网络介绍</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#id7">实例NFU子网执行体</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#id8">准备子网执行体各数据段数据</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#id6">概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#id7">步骤（示例代码）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#id8">注意事项（外源网络）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#id9">附录：常见问题与检查项</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../models/index.html">示例</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="../models/index.html">基础模型</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../models/mlp.html">多层感知机 (MLP)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../models/mlp.html#id1">模型概述</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../models/mlp.html#id2">实现代码</a></li>
@@ -171,9 +173,8 @@
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">高级使用</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="neuron_model.html">神经元模型</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="neuron_model.html#id2">模型介绍</a></li>
-<li class="toctree-l3"><a class="reference internal" href="neuron_model.html#id3">参数说明</a></li>
-<li class="toctree-l3"><a class="reference internal" href="neuron_model.html#id4">使用示例</a></li>
+<li class="toctree-l3"><a class="reference internal" href="neuron_model.html#id2">7.1 汇编代码</a></li>
+<li class="toctree-l3"><a class="reference internal" href="neuron_model.html#id3">7.2 事件语言</a></li>
 </ul>
 </li>
 </ul>
@@ -216,9 +217,8 @@
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="neuron_model.html">神经元模型</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="neuron_model.html#id2">模型介绍</a></li>
-<li class="toctree-l2"><a class="reference internal" href="neuron_model.html#id3">参数说明</a></li>
-<li class="toctree-l2"><a class="reference internal" href="neuron_model.html#id4">使用示例</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neuron_model.html#id2">7.1 汇编代码</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neuron_model.html#id3">7.2 事件语言</a></li>
 </ul>
 </li>
 </ul>

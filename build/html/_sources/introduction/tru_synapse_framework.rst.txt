@@ -9,7 +9,7 @@ TruSynapse 框架
 
 .. figure:: ../_static/images/tru_synapse_processor_architecture.png
    :alt: TruSynapse Processor Architecture
-   :width: 80%
+   :width: 50%
    :align: center
 
    图1 TruSynapse 处理器架构示意图
