@@ -1,52 +1,222 @@
-全栈神经网络运行    
-==============
+全栈神经网络运行
+=================
 
-全栈神经网络介绍
---------------
+概述
+----
+本示例展示如何使用 TruSynapse 框架将一个三层前向传播全连接神经网络映射到 NFU 并启动计算。文档按流程分为网络构建、连接转换、输入准备、构造子网执行体与执行五个部分，并给出外源神经网络的调用示例。
 
-TODO: 
+前置条件
+--------
+- 已安装并能导入 TruSynapse 框架对应的 Python 包（例如 `functional`、`SNNData`、`SNNDriver` 等）。
+- 熟悉 PyTorch 风格的模块定义（示例中使用 `nn.Module`）。
+- 已导入必要模块（如 `torch`、`numpy as np`、`ctypes` 等）。
 
-构建神经网络
-------------
+1. 构建神经网络（net）
+----------------------
+描述网络结构（层次、每层神经元数、必要的神经元/层参数等），并将网络信息保存为变量（例如 `net`），供后续映射使用。
 
-TODO: 
+示例（PyTorch 风格）：
 
+.. code-block:: python
+    :linenos:
 
-转换连接关系数据
-------------
+    class SNNMLP(nn.Module):
+        def __init__(self, input_neuron_num=784, hidden1=512, hidden2=256, output_neuron_num=10, beta=0.9):
+            super(SNNMLP, self).__init__()
+            self.fc1 = nn.Linear(input_neuron_num, hidden1, bias=False)
+            self.lif1 = snn.Leaky(beta=beta, spike_grad=surrogate.fast_sigmoid())
 
-TODO: 
+            self.fc2 = nn.Linear(hidden1, hidden2, bias=False)
+            self.lif2 = snn.Leaky(beta=beta, spike_grad=surrogate.fast_sigmoid())
 
-输入spike数据
-------------
+            self.fc3 = nn.Linear(hidden2, output_neuron_num, bias=False)
+            self.lif3 = snn.Leaky(beta=beta, spike_grad=surrogate.fast_sigmoid())
 
-TODO: 
+        def forward(self, x):
+            mem1 = self.lif1.init_leaky()
+            mem2 = self.lif2.init_leaky()
+            mem3 = self.lif3.init_leaky()
 
+            spk1, mem1 = self.lif1(self.fc1(x), mem1)
+            spk2, mem2 = self.lif2(self.fc2(spk1), mem2)
+            spk3, mem3 = self.lif3(self.fc3(spk2), mem3)
+            return spk3, mem3
 
-调用framework构造NFU子网执行体
-------------------------------
+    net = SNNMLP()
 
-TODO: 
+要点
+- 将网络实例保存为 `net`，供后续框架映射接口使用。
+- 确认每层的神经元数目与后续连接矩阵一致。
 
-执行NFU子网执行体
-------------------
+2. 转换连接关系数据（connections）
+----------------------------------
+使用辅助函数将二维连接矩阵/张量转换为框架需要的三元组格式（src_id, dst_id, weight）。
 
-TODO: 
+示例函数：
+
+.. code-block:: python
+    :linenos:
+
+    def connection_trans(connection_tensor, start1layer_ID, block_num):
+        """
+        将二维连接张量转换为三元组列表。
+        connection_tensor: 2D tensor，形状为 (neuron_in_src_block, neuron_in_dst_block)
+        start1layer_ID: 源层第一个神经元的全局 ID
+        block_num: 子模块数量（重复块数）
+        返回: triplets 列表，元素为 (src_id, dst_id, weight_float32)
+        """
+        triplets = []
+        neuron_in_src_block, neuron_in_dst_block = connection_tensor.shape
+        start2layer_ID = start1layer_ID + block_num * neuron_in_src_block
+        for k in range(block_num):
+            for i in range(neuron_in_src_block):
+                for j in range(neuron_in_dst_block):
+                    src_id = i + start1layer_ID + k * neuron_in_src_block
+                    dst_id = j + start2layer_ID + k * neuron_in_dst_block
+                    weight = np.float32(connection_tensor[i, j].item())
+                    triplets.append((src_id, dst_id, weight))
+        return triplets
+
+要点
+- 输入常为二维张量（邻接矩阵）、源层起始 ID 以及子模块数量。
+- 返回的三元组应与框架 `connections` 字段格式一致，检查 ID 编号是否越界。
+
+3. 准备输入脉冲（inputdata）
+-----------------------------
+输入应为一维列表，元素为 0 或 1，长度等于输入层神经元数。
+
+示例：
+
+.. code-block:: python
+    :linenos:
+
+    inputdata = [0, 1, 0, 0, 1, ...]  # 长度应等于 input 层大小
+
+注意
+- 若为多时刻或批量输入，请根据框架要求组织数据维度。
+
+4. 构造 NFU 子网执行体
+-----------------------
+使用框架接口将网络、连接和输入组合成可执行的数据结构（示例接口名使用 `functional.framework`）。
+
+示例：
+
+.. code-block:: python
+    :linenos:
+
+    data = functional.framework(net, connections, inputdata)
+
+要点
+- `functional.framework` 的实际参数和返回结构以所使用的 TruSynapse 版本为准。
+- 构造完成后，可对 `data` 进行简单验证（字段完整性、长度一致性等）。
+
+5. 执行 NFU 子网并获取输出
+---------------------------
+调用运行接口执行 NFU 子网，并读取返回结果。
+
+示例：
+
+.. code-block:: python
+    :linenos:
+
+    net_output = functional.run(data)
+
+说明
+- `net_output` 的格式取决于框架定义，通常包含各层或每个神经元的输出信息。
+- 执行前请确保 `net`、`connections` 与 `inputdata` 三者维度和索引一致，避免越界或 ID 错误。
 
 外源神经网络应用
-==============
+=================
+概述
+----
+对于外源神经网络（例如 Deepseek、千问 等），网络结构和参数来自外部资源，需构建 NFU 子网执行体（SNNData）并调用底层驱动执行。下面示例按典型的 5 个步骤给出参考实现。
 
-外源神经网络介绍
---------------
+步骤（示例代码）
+----------------
 
-TODO: 
+1) 实例化 NFU 子网执行体
 
-实例NFU子网执行体
----------------
+.. code-block:: python
+    :linenos:
 
-TODO:
+    # 实例化一个 SNNData 子网执行体
+    snn_data = SNNData()
 
-准备子网执行体各数据段数据
------------------------
+2) 填充子网执行体各字段（示例）
 
-TODO:
+.. code-block:: python
+    :linenos:
+
+    # 填充 27 个配置参数
+    snn_data.params = (ctypes.c_uint64 * 27)(*[ctypes.c_uint64(x) for x in params])
+
+    # 填充 connection_data
+    snn_data.connection_data = (ctypes.c_uint64 * len(connection_data))(
+        *[ctypes.c_uint64(x) for x in connection_data]
+    )
+    snn_data.connection_len = len(connection_data)
+
+    # 填充 inputneuronlist_data
+    snn_data.inputneuronlist_data = (ctypes.c_uint32 * len(inputneuronlist_data))(
+        *[ctypes.c_uint32(x) for x in inputneuronlist_data]
+    )
+    snn_data.inputneuronlist_len = len(inputneuronlist_data)
+
+    # 填充 inputspike_data
+    snn_data.inputspike_data = (ctypes.c_uint32 * len(inputspike_data))(
+        *[ctypes.c_uint32(x) for x in inputspike_data]
+    )
+    snn_data.inputspike_len = len(inputspike_data)
+
+    # 填充 neuronbase_data
+    snn_data.neuronbase_data = (ctypes.c_uint32 * len(neuronbase_data))(
+        *[ctypes.c_uint32(x) for x in neuronbase_data]
+    )
+    snn_data.neuronbase_len = len(neuronbase_data)
+
+    # 填充 neuron_data
+    snn_data.neuron_data = (ctypes.c_uint32 * len(neuron_data))(
+        *[ctypes.c_uint32(x) for x in neuron_data]
+    )
+    snn_data.neuron_data_len = len(neuron_data)
+
+    # 初始化输出字段
+    snn_data.output_data = None
+    snn_data.output_len = 0
+
+3) 执行子网
+
+.. code-block:: python
+    :linenos:
+
+    driver = SNNDriver()
+    driver.execute(ctypes.byref(snn_data))
+
+4) 处理子网输出
+
+.. code-block:: python
+    :linenos:
+
+    if snn_data.output_data and snn_data.output_len > 0:
+        output_array = ctypes.cast(snn_data.output_data, POINTER(c_uint32 * snn_data.output_len))
+        output_results = [output_array.contents[i] for i in range(snn_data.output_len)]
+
+5) 回收子网执行体资源
+
+.. code-block:: python
+    :linenos:
+
+    driver.free_output(ctypes.byref(snn_data))
+
+注意事项（外源网络）
+--------------------
+- 数据类型与长度必须与底层驱动接口一致（例如 uint32/uint64 区分）。
+- 对于大规模数据，优先在小样本上验证端到端流程再批量运行。
+- 若网络参数来源于文件，请确保解析后按上述字段正确填充 `snn_data`。
+
+附录：常见问题与检查项
+---------------------
+- ID 编号是否从 0 或 1 开始，并与连接三元组一致；
+- 连通性矩阵维度是否与声明的神经元数匹配；
+- ctypes 数组长度与对应 *_len 字段是否一致；
+- 执行异常时，先检查输入数据格式与驱动错误返回码。

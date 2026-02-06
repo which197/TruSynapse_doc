@@ -30,7 +30,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="示例" href="../models/index.html" />
+    <link rel="next" title="基础模型" href="../models/index.html" />
     <link rel="prev" title="数据准备" href="data_preparation.html" /> 
 </head>
 
@@ -58,21 +58,21 @@
 <li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">介绍</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../introduction/tru_synapse_framework.html">TruSynapse 框架</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../introduction/tru_synapse_framework.html#id1">琴枢微处理器简介</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../introduction/tru_synapse_framework.html#id2">TruSynapse 框架定位与目标</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../introduction/tru_synapse_framework.html#id3">软件架构与层次视图</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../introduction/tru_synapse_framework.html#id2">软件架构与层次视图</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../introduction/tru_synapse_framework.html#id3">TruSynapse 框架定位与目标</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../introduction/foundational_concepts/index.html">基础概念</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../introduction/foundational_concepts/data_organization_and_compression.html">神经网络数据组织与压缩</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../introduction/foundational_concepts/data_organization_and_compression.html#id2">数据类型</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../introduction/foundational_concepts/data_organization_and_compression.html#id3">连接关系压缩与存储方式</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../introduction/foundational_concepts/data_organization_and_compression.html#id3">存储与压缩</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../introduction/foundational_concepts/data_organization_and_compression.html#trusynapse">传统表示与 TruSynapse 方案</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../introduction/foundational_concepts/subnet_executor.html">子网执行体</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../introduction/foundational_concepts/subnet_executor.html#id2">子网执行体概述</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../introduction/foundational_concepts/subnet_executor.html#id3">子网执行体结构</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../introduction/foundational_concepts/subnet_executor.html#snndata">子网执行体数据结构SNNData</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../introduction/foundational_concepts/subnet_executor.html#id4">子网执行体内存管理</a></li>
 </ul>
 </li>
 </ul>
@@ -93,23 +93,25 @@
 </ul>
 </li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">全栈神经网络运行</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id2">全栈神经网络介绍</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id3">构建神经网络</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id4">转换连接关系数据</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#spike">输入spike数据</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#frameworknfu">调用framework构造NFU子网执行体</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#nfu">执行NFU子网执行体</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">前置条件</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#net">1. 构建神经网络（net）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#connections">2. 转换连接关系数据（connections）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#inputdata">3. 准备输入脉冲（inputdata）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nfu">4. 构造 NFU 子网执行体</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">5. 执行 NFU 子网并获取输出</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#id5">外源神经网络应用</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id6">外源神经网络介绍</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id7">实例NFU子网执行体</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id8">准备子网执行体各数据段数据</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">步骤（示例代码）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">注意事项（外源网络）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id9">附录：常见问题与检查项</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../models/index.html">示例</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="../models/index.html">基础模型</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../models/mlp.html">多层感知机 (MLP)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../models/mlp.html#id1">模型概述</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../models/mlp.html#id2">实现代码</a></li>
@@ -214,43 +216,206 @@
   <section id="id1">
 <h1>全栈神经网络运行<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h1>
 <section id="id2">
-<h2>全栈神经网络介绍<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
-<p>TODO:</p>
+<h2>概述<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
+<p>本示例展示如何使用 TruSynapse 框架将一个三层前向传播全连接神经网络映射到 NFU 并启动计算。文档按流程分为网络构建、连接转换、输入准备、构造子网执行体与执行五个部分，并给出外源神经网络的调用示例。</p>
 </section>
 <section id="id3">
-<h2>构建神经网络<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h2>
-<p>TODO:</p>
+<h2>前置条件<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>已安装并能导入 TruSynapse 框架对应的 Python 包（例如 <cite>functional</cite>、<cite>SNNData</cite>、<cite>SNNDriver</cite> 等）。</p></li>
+<li><p>熟悉 PyTorch 风格的模块定义（示例中使用 <cite>nn.Module</cite>）。</p></li>
+<li><p>已导入必要模块（如 <cite>torch</cite>、<cite>numpy as np</cite>、<cite>ctypes</cite> 等）。</p></li>
+</ul>
 </section>
-<section id="id4">
-<h2>转换连接关系数据<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h2>
-<p>TODO:</p>
+<section id="net">
+<h2>1. 构建神经网络（net）<a class="headerlink" href="#net" title="Permalink to this heading"></a></h2>
+<p>描述网络结构（层次、每层神经元数、必要的神经元/层参数等），并将网络信息保存为变量（例如 <cite>net</cite>），供后续映射使用。</p>
+<p>示例（PyTorch 风格）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">class</span> <span class="nc">SNNMLP</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="linenos"> 2</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_neuron_num</span><span class="o">=</span><span class="mi">784</span><span class="p">,</span> <span class="n">hidden1</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span> <span class="n">hidden2</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">output_neuron_num</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mf">0.9</span><span class="p">):</span>
+<span class="linenos"> 3</span>        <span class="nb">super</span><span class="p">(</span><span class="n">SNNMLP</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+<span class="linenos"> 4</span>        <span class="bp">self</span><span class="o">.</span><span class="n">fc1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">input_neuron_num</span><span class="p">,</span> <span class="n">hidden1</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="linenos"> 5</span>        <span class="bp">self</span><span class="o">.</span><span class="n">lif1</span> <span class="o">=</span> <span class="n">snn</span><span class="o">.</span><span class="n">Leaky</span><span class="p">(</span><span class="n">beta</span><span class="o">=</span><span class="n">beta</span><span class="p">,</span> <span class="n">spike_grad</span><span class="o">=</span><span class="n">surrogate</span><span class="o">.</span><span class="n">fast_sigmoid</span><span class="p">())</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span>        <span class="bp">self</span><span class="o">.</span><span class="n">fc2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden1</span><span class="p">,</span> <span class="n">hidden2</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="linenos"> 8</span>        <span class="bp">self</span><span class="o">.</span><span class="n">lif2</span> <span class="o">=</span> <span class="n">snn</span><span class="o">.</span><span class="n">Leaky</span><span class="p">(</span><span class="n">beta</span><span class="o">=</span><span class="n">beta</span><span class="p">,</span> <span class="n">spike_grad</span><span class="o">=</span><span class="n">surrogate</span><span class="o">.</span><span class="n">fast_sigmoid</span><span class="p">())</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span>        <span class="bp">self</span><span class="o">.</span><span class="n">fc3</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden2</span><span class="p">,</span> <span class="n">output_neuron_num</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="linenos">11</span>        <span class="bp">self</span><span class="o">.</span><span class="n">lif3</span> <span class="o">=</span> <span class="n">snn</span><span class="o">.</span><span class="n">Leaky</span><span class="p">(</span><span class="n">beta</span><span class="o">=</span><span class="n">beta</span><span class="p">,</span> <span class="n">spike_grad</span><span class="o">=</span><span class="n">surrogate</span><span class="o">.</span><span class="n">fast_sigmoid</span><span class="p">())</span>
+<span class="linenos">12</span>
+<span class="linenos">13</span>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="linenos">14</span>        <span class="n">mem1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lif1</span><span class="o">.</span><span class="n">init_leaky</span><span class="p">()</span>
+<span class="linenos">15</span>        <span class="n">mem2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lif2</span><span class="o">.</span><span class="n">init_leaky</span><span class="p">()</span>
+<span class="linenos">16</span>        <span class="n">mem3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lif3</span><span class="o">.</span><span class="n">init_leaky</span><span class="p">()</span>
+<span class="linenos">17</span>
+<span class="linenos">18</span>        <span class="n">spk1</span><span class="p">,</span> <span class="n">mem1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lif1</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fc1</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">mem1</span><span class="p">)</span>
+<span class="linenos">19</span>        <span class="n">spk2</span><span class="p">,</span> <span class="n">mem2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lif2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fc2</span><span class="p">(</span><span class="n">spk1</span><span class="p">),</span> <span class="n">mem2</span><span class="p">)</span>
+<span class="linenos">20</span>        <span class="n">spk3</span><span class="p">,</span> <span class="n">mem3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lif3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fc3</span><span class="p">(</span><span class="n">spk2</span><span class="p">),</span> <span class="n">mem3</span><span class="p">)</span>
+<span class="linenos">21</span>        <span class="k">return</span> <span class="n">spk3</span><span class="p">,</span> <span class="n">mem3</span>
+<span class="linenos">22</span>
+<span class="linenos">23</span><span class="n">net</span> <span class="o">=</span> <span class="n">SNNMLP</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>要点
+- 将网络实例保存为 <cite>net</cite>，供后续框架映射接口使用。
+- 确认每层的神经元数目与后续连接矩阵一致。</p>
 </section>
-<section id="spike">
-<h2>输入spike数据<a class="headerlink" href="#spike" title="Permalink to this heading"></a></h2>
-<p>TODO:</p>
+<section id="connections">
+<h2>2. 转换连接关系数据（connections）<a class="headerlink" href="#connections" title="Permalink to this heading"></a></h2>
+<p>使用辅助函数将二维连接矩阵/张量转换为框架需要的三元组格式（src_id, dst_id, weight）。</p>
+<p>示例函数：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">def</span> <span class="nf">connection_trans</span><span class="p">(</span><span class="n">connection_tensor</span><span class="p">,</span> <span class="n">start1layer_ID</span><span class="p">,</span> <span class="n">block_num</span><span class="p">):</span>
+<span class="linenos"> 2</span><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="linenos"> 3</span><span class="sd">    将二维连接张量转换为三元组列表。</span>
+<span class="linenos"> 4</span><span class="sd">    connection_tensor: 2D tensor，形状为 (neuron_in_src_block, neuron_in_dst_block)</span>
+<span class="linenos"> 5</span><span class="sd">    start1layer_ID: 源层第一个神经元的全局 ID</span>
+<span class="linenos"> 6</span><span class="sd">    block_num: 子模块数量（重复块数）</span>
+<span class="linenos"> 7</span><span class="sd">    返回: triplets 列表，元素为 (src_id, dst_id, weight_float32)</span>
+<span class="linenos"> 8</span><span class="sd">    &quot;&quot;&quot;</span>
+<span class="linenos"> 9</span>    <span class="n">triplets</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="linenos">10</span>    <span class="n">neuron_in_src_block</span><span class="p">,</span> <span class="n">neuron_in_dst_block</span> <span class="o">=</span> <span class="n">connection_tensor</span><span class="o">.</span><span class="n">shape</span>
+<span class="linenos">11</span>    <span class="n">start2layer_ID</span> <span class="o">=</span> <span class="n">start1layer_ID</span> <span class="o">+</span> <span class="n">block_num</span> <span class="o">*</span> <span class="n">neuron_in_src_block</span>
+<span class="linenos">12</span>    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">block_num</span><span class="p">):</span>
+<span class="linenos">13</span>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">neuron_in_src_block</span><span class="p">):</span>
+<span class="linenos">14</span>            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">neuron_in_dst_block</span><span class="p">):</span>
+<span class="linenos">15</span>                <span class="n">src_id</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">start1layer_ID</span> <span class="o">+</span> <span class="n">k</span> <span class="o">*</span> <span class="n">neuron_in_src_block</span>
+<span class="linenos">16</span>                <span class="n">dst_id</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="n">start2layer_ID</span> <span class="o">+</span> <span class="n">k</span> <span class="o">*</span> <span class="n">neuron_in_dst_block</span>
+<span class="linenos">17</span>                <span class="n">weight</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">connection_tensor</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+<span class="linenos">18</span>                <span class="n">triplets</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">src_id</span><span class="p">,</span> <span class="n">dst_id</span><span class="p">,</span> <span class="n">weight</span><span class="p">))</span>
+<span class="linenos">19</span>    <span class="k">return</span> <span class="n">triplets</span>
+</pre></div>
+</div>
+<p>要点
+- 输入常为二维张量（邻接矩阵）、源层起始 ID 以及子模块数量。
+- 返回的三元组应与框架 <cite>connections</cite> 字段格式一致，检查 ID 编号是否越界。</p>
 </section>
-<section id="frameworknfu">
-<h2>调用framework构造NFU子网执行体<a class="headerlink" href="#frameworknfu" title="Permalink to this heading"></a></h2>
-<p>TODO:</p>
+<section id="inputdata">
+<h2>3. 准备输入脉冲（inputdata）<a class="headerlink" href="#inputdata" title="Permalink to this heading"></a></h2>
+<p>输入应为一维列表，元素为 0 或 1，长度等于输入层神经元数。</p>
+<p>示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">inputdata</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>  <span class="c1"># 长度应等于 input 层大小</span>
+</pre></div>
+</div>
+<p>注意
+- 若为多时刻或批量输入，请根据框架要求组织数据维度。</p>
 </section>
 <section id="nfu">
-<h2>执行NFU子网执行体<a class="headerlink" href="#nfu" title="Permalink to this heading"></a></h2>
-<p>TODO:</p>
+<h2>4. 构造 NFU 子网执行体<a class="headerlink" href="#nfu" title="Permalink to this heading"></a></h2>
+<p>使用框架接口将网络、连接和输入组合成可执行的数据结构（示例接口名使用 <cite>functional.framework</cite>）。</p>
+<p>示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">data</span> <span class="o">=</span> <span class="n">functional</span><span class="o">.</span><span class="n">framework</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">connections</span><span class="p">,</span> <span class="n">inputdata</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>要点
+- <cite>functional.framework</cite> 的实际参数和返回结构以所使用的 TruSynapse 版本为准。
+- 构造完成后，可对 <cite>data</cite> 进行简单验证（字段完整性、长度一致性等）。</p>
+</section>
+<section id="id4">
+<h2>5. 执行 NFU 子网并获取输出<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h2>
+<p>调用运行接口执行 NFU 子网，并读取返回结果。</p>
+<p>示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">net_output</span> <span class="o">=</span> <span class="n">functional</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>说明
+- <cite>net_output</cite> 的格式取决于框架定义，通常包含各层或每个神经元的输出信息。
+- 执行前请确保 <cite>net</cite>、<cite>connections</cite> 与 <cite>inputdata</cite> 三者维度和索引一致，避免越界或 ID 错误。</p>
 </section>
 </section>
 <section id="id5">
 <h1>外源神经网络应用<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h1>
 <section id="id6">
-<h2>外源神经网络介绍<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h2>
-<p>TODO:</p>
+<h2>概述<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h2>
+<p>对于外源神经网络（例如 Deepseek、千问 等），网络结构和参数来自外部资源，需构建 NFU 子网执行体（SNNData）并调用底层驱动执行。下面示例按典型的 5 个步骤给出参考实现。</p>
 </section>
 <section id="id7">
-<h2>实例NFU子网执行体<a class="headerlink" href="#id7" title="Permalink to this heading"></a></h2>
-<p>TODO:</p>
+<h2>步骤（示例代码）<a class="headerlink" href="#id7" title="Permalink to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>实例化 NFU 子网执行体</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="c1"># 实例化一个 SNNData 子网执行体</span>
+<span class="linenos">2</span><span class="n">snn_data</span> <span class="o">=</span> <span class="n">SNNData</span><span class="p">()</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>填充子网执行体各字段（示例）</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1"># 填充 27 个配置参数</span>
+<span class="linenos"> 2</span><span class="n">snn_data</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint64</span> <span class="o">*</span> <span class="mi">27</span><span class="p">)(</span><span class="o">*</span><span class="p">[</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint64</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">params</span><span class="p">])</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="c1"># 填充 connection_data</span>
+<span class="linenos"> 5</span><span class="n">snn_data</span><span class="o">.</span><span class="n">connection_data</span> <span class="o">=</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint64</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">connection_data</span><span class="p">))(</span>
+<span class="linenos"> 6</span>    <span class="o">*</span><span class="p">[</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint64</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">connection_data</span><span class="p">]</span>
+<span class="linenos"> 7</span><span class="p">)</span>
+<span class="linenos"> 8</span><span class="n">snn_data</span><span class="o">.</span><span class="n">connection_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">connection_data</span><span class="p">)</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span><span class="c1"># 填充 inputneuronlist_data</span>
+<span class="linenos">11</span><span class="n">snn_data</span><span class="o">.</span><span class="n">inputneuronlist_data</span> <span class="o">=</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint32</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">inputneuronlist_data</span><span class="p">))(</span>
+<span class="linenos">12</span>    <span class="o">*</span><span class="p">[</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint32</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">inputneuronlist_data</span><span class="p">]</span>
+<span class="linenos">13</span><span class="p">)</span>
+<span class="linenos">14</span><span class="n">snn_data</span><span class="o">.</span><span class="n">inputneuronlist_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">inputneuronlist_data</span><span class="p">)</span>
+<span class="linenos">15</span>
+<span class="linenos">16</span><span class="c1"># 填充 inputspike_data</span>
+<span class="linenos">17</span><span class="n">snn_data</span><span class="o">.</span><span class="n">inputspike_data</span> <span class="o">=</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint32</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">inputspike_data</span><span class="p">))(</span>
+<span class="linenos">18</span>    <span class="o">*</span><span class="p">[</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint32</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">inputspike_data</span><span class="p">]</span>
+<span class="linenos">19</span><span class="p">)</span>
+<span class="linenos">20</span><span class="n">snn_data</span><span class="o">.</span><span class="n">inputspike_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">inputspike_data</span><span class="p">)</span>
+<span class="linenos">21</span>
+<span class="linenos">22</span><span class="c1"># 填充 neuronbase_data</span>
+<span class="linenos">23</span><span class="n">snn_data</span><span class="o">.</span><span class="n">neuronbase_data</span> <span class="o">=</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint32</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">neuronbase_data</span><span class="p">))(</span>
+<span class="linenos">24</span>    <span class="o">*</span><span class="p">[</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint32</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">neuronbase_data</span><span class="p">]</span>
+<span class="linenos">25</span><span class="p">)</span>
+<span class="linenos">26</span><span class="n">snn_data</span><span class="o">.</span><span class="n">neuronbase_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">neuronbase_data</span><span class="p">)</span>
+<span class="linenos">27</span>
+<span class="linenos">28</span><span class="c1"># 填充 neuron_data</span>
+<span class="linenos">29</span><span class="n">snn_data</span><span class="o">.</span><span class="n">neuron_data</span> <span class="o">=</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint32</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">neuron_data</span><span class="p">))(</span>
+<span class="linenos">30</span>    <span class="o">*</span><span class="p">[</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint32</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">neuron_data</span><span class="p">]</span>
+<span class="linenos">31</span><span class="p">)</span>
+<span class="linenos">32</span><span class="n">snn_data</span><span class="o">.</span><span class="n">neuron_data_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">neuron_data</span><span class="p">)</span>
+<span class="linenos">33</span>
+<span class="linenos">34</span><span class="c1"># 初始化输出字段</span>
+<span class="linenos">35</span><span class="n">snn_data</span><span class="o">.</span><span class="n">output_data</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="linenos">36</span><span class="n">snn_data</span><span class="o">.</span><span class="n">output_len</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>执行子网</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">driver</span> <span class="o">=</span> <span class="n">SNNDriver</span><span class="p">()</span>
+<span class="linenos">2</span><span class="n">driver</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">snn_data</span><span class="p">))</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>处理子网输出</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">if</span> <span class="n">snn_data</span><span class="o">.</span><span class="n">output_data</span> <span class="ow">and</span> <span class="n">snn_data</span><span class="o">.</span><span class="n">output_len</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+<span class="linenos">2</span>    <span class="n">output_array</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">snn_data</span><span class="o">.</span><span class="n">output_data</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">c_uint32</span> <span class="o">*</span> <span class="n">snn_data</span><span class="o">.</span><span class="n">output_len</span><span class="p">))</span>
+<span class="linenos">3</span>    <span class="n">output_results</span> <span class="o">=</span> <span class="p">[</span><span class="n">output_array</span><span class="o">.</span><span class="n">contents</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">snn_data</span><span class="o">.</span><span class="n">output_len</span><span class="p">)]</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="5">
+<li><p>回收子网执行体资源</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">driver</span><span class="o">.</span><span class="n">free_output</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">snn_data</span><span class="p">))</span>
+</pre></div>
+</div>
 </section>
 <section id="id8">
-<h2>准备子网执行体各数据段数据<a class="headerlink" href="#id8" title="Permalink to this heading"></a></h2>
-<p>TODO:</p>
+<h2>注意事项（外源网络）<a class="headerlink" href="#id8" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>数据类型与长度必须与底层驱动接口一致（例如 uint32/uint64 区分）。</p></li>
+<li><p>对于大规模数据，优先在小样本上验证端到端流程再批量运行。</p></li>
+<li><p>若网络参数来源于文件，请确保解析后按上述字段正确填充 <cite>snn_data</cite>。</p></li>
+</ul>
+</section>
+<section id="id9">
+<h2>附录：常见问题与检查项<a class="headerlink" href="#id9" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>ID 编号是否从 0 或 1 开始，并与连接三元组一致；</p></li>
+<li><p>连通性矩阵维度是否与声明的神经元数匹配；</p></li>
+<li><p>ctypes 数组长度与对应 <a href="#id10"><span class="problematic" id="id11">*</span></a>_len 字段是否一致；</p></li>
+<li><p>执行异常时，先检查输入数据格式与驱动错误返回码。</p></li>
+</ul>
 </section>
 </section>
 
@@ -259,7 +424,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="data_preparation.html" class="btn btn-neutral float-left" title="数据准备" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../models/index.html" class="btn btn-neutral float-right" title="示例" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../models/index.html" class="btn btn-neutral float-right" title="基础模型" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
