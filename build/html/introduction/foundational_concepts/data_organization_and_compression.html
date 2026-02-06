@@ -58,14 +58,15 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">介绍</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../tru_synapse_framework.html">TruSynapse 框架</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../tru_synapse_framework.html#id1">琴枢微处理器简介</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../tru_synapse_framework.html#id2">TruSynapse 框架定位与目标</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../tru_synapse_framework.html#id3">软件架构与层次视图</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tru_synapse_framework.html#id2">软件架构与层次视图</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tru_synapse_framework.html#id3">TruSynapse 框架定位与目标</a></li>
 </ul>
 </li>
 <li class="toctree-l2 current"><a class="reference internal" href="index.html">基础概念</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">神经网络数据组织与压缩</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#id2">数据类型</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id3">连接关系压缩与存储方式</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">存储与压缩</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#trusynapse">传统表示与 TruSynapse 方案</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="subnet_executor.html">子网执行体</a><ul>
@@ -216,11 +217,91 @@
 <h1>神经网络数据组织与压缩<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h1>
 <section id="id2">
 <h2>数据类型<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
-<p>TODO:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>神经元状态（neuron state）</dt><dd><ul>
+<li><p>记录神经元膜电位及其随时间的变化（例如用于仿真时的内部变量）。</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>连接关系（connectivity / synapses）</dt><dd><ul>
+<li><p>描述神经元之间的突触连接，主要包含权重信息和连接拓扑。</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>输入 spike</dt><dd><ul>
+<li><p>输入到网络的事件流（时间序列形式的脉冲/ spike）。</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>输出 spike</dt><dd><ul>
+<li><p>网络产生的事件流（作为仿真或推理的输出）。</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
 </section>
 <section id="id3">
-<h2>连接关系压缩与存储方式<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h2>
-<p>TODO:</p>
+<h2>存储与压缩<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><dl class="simple">
+<dt>神经元状态</dt><dd><ul>
+<li><p>每个神经元有唯一状态，适合顺序（数组）存储，便于按索引快速访问。</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>输入/输出 spike</dt><dd><ul>
+<li><p>通常为时间序列，也可按时间或事件索引顺序存储（顺序存储或事件列表）。</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>连接关系（稀疏性与查找）</dt><dd><ul>
+<li><p>大规模网络中连接关系高度稀疏，直接使用稠密矩阵会浪费空间。</p></li>
+<li><p>HPC 常见的稀疏存储（例如三元组（<code class="docutils literal notranslate"><span class="pre">i,</span> <span class="pre">j,</span> <span class="pre">value</span></code>））在查询和随机访问上开销较大，因此选择合适的存储格式对压缩率和访存效率至关重要。</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="trusynapse">
+<h2>传统表示与 TruSynapse 方案<a class="headerlink" href="#trusynapse" title="Permalink to this heading"></a></h2>
+<p>传统上，连接信息常用两张表来表示：</p>
+<ul class="simple">
+<li><p>权重表：<code class="docutils literal notranslate"><span class="pre">Weight&lt;i,j&gt;</span></code> 表示从 <code class="docutils literal notranslate"><span class="pre">i</span></code> 到 <code class="docutils literal notranslate"><span class="pre">j</span></code> 的权重值（若为 0 则无效）。</p></li>
+<li><p>连接表：<code class="docutils literal notranslate"><span class="pre">C&lt;i,j&gt;</span></code> 为 <code class="docutils literal notranslate"><span class="pre">1</span></code> 表示存在连接，<code class="docutils literal notranslate"><span class="pre">0</span></code> 表示无连接。</p></li>
+</ul>
+<p>二者关系：在权重表中非零的位置，连接表对应位置必然为 <code class="docutils literal notranslate"><span class="pre">1</span></code>。</p>
+<p>TruSynapse 的做法是将两张表合并为一张表，在连接记录中直接存储权重信息，从而减少冗余、改善压缩效果并提高访存效率。</p>
+<figure class="align-center" id="id4">
+<a class="reference internal image-reference" href="../../_images/weight_and_connection.png"><img alt="Weight and Connection Representation" src="../../_images/weight_and_connection.png" style="width: 80%;" /></a>
+<figcaption>
+<p><span class="caption-text">权重表和连接表的关系</span><a class="headerlink" href="#id4" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p>连接关系采用了图4所示的压缩存储方式：</p>
+<figure class="align-center" id="id5">
+<a class="reference internal image-reference" href="../../_images/data_compression.png"><img alt="Data Compression" src="../../_images/data_compression.png" style="width: 80%;" /></a>
+<figcaption>
+<p><span class="caption-text">连接表的压缩存储方式</span><a class="headerlink" href="#id5" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p>上述压缩后的连接关系表C需要拆分到多个NFU中：</p>
+<ul class="simple">
+<li><p>每个NFU只存储子表``C[i]``, <code class="docutils literal notranslate"><span class="pre">i``为GNC</span> <span class="pre">ID。``C</span> <span class="pre">=</span> <span class="pre">∪C[i]</span></code></p></li>
+<li><p>各子表不同，<code class="docutils literal notranslate"><span class="pre">∀i,j(i⧧j)</span> <span class="pre">C[i]∩C[j]</span> <span class="pre">=</span> <span class="pre">∅</span></code></p></li>
+</ul>
 </section>
 </section>
 
