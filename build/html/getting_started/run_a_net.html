@@ -83,11 +83,10 @@
 <li class="toctree-l2"><a class="reference internal" href="installation.html">安装指南</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="installation.html#id2">系统要求</a></li>
 <li class="toctree-l3"><a class="reference internal" href="installation.html#id3">安装步骤</a></li>
-<li class="toctree-l3"><a class="reference internal" href="installation.html#id4">验证安装</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="data_preparation.html">数据准备</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="data_preparation.html#id2">神经网络</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data_preparation.html#id2">神经网络定义</a></li>
 <li class="toctree-l3"><a class="reference internal" href="data_preparation.html#id3">权重文件</a></li>
 <li class="toctree-l3"><a class="reference internal" href="data_preparation.html#id4">输入数据</a></li>
 </ul>
@@ -303,7 +302,7 @@
 <span class="linenos">34</span><span class="n">connection_input</span> <span class="o">=</span> <span class="n">connection_trans</span><span class="p">(</span><span class="n">connection_origin_value</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="linenos">35</span><span class="n">connection_hidden1</span> <span class="o">=</span> <span class="n">connection_trans</span><span class="p">(</span><span class="n">connection_origin_value</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">784</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="linenos">36</span><span class="n">connection_output</span> <span class="o">=</span> <span class="n">connection_trans</span><span class="p">(</span><span class="n">connection_origin_value</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">1296</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="linenos">37</span><span class="n">connection</span> <span class="o">=</span> <span class="n">connection_input</span> <span class="o">+</span> <span class="n">connection_hidden1</span> <span class="o">+</span> <span class="n">connection_output</span>
+<span class="linenos">37</span><span class="n">connections</span> <span class="o">=</span> <span class="n">connection_input</span> <span class="o">+</span> <span class="n">connection_hidden1</span> <span class="o">+</span> <span class="n">connection_output</span>
 </pre></div>
 </div>
 <p>要点</p>

@@ -58,21 +58,21 @@
 <li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">介绍</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../introduction/tru_synapse_framework.html">TruSynapse 框架</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../introduction/tru_synapse_framework.html#id1">琴枢微处理器简介</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../introduction/tru_synapse_framework.html#id2">TruSynapse 框架定位与目标</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../introduction/tru_synapse_framework.html#id3">软件架构与层次视图</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../introduction/tru_synapse_framework.html#id2">软件架构与层次视图</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../introduction/tru_synapse_framework.html#id3">TruSynapse 框架定位与目标</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../introduction/foundational_concepts/index.html">基础概念</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../introduction/foundational_concepts/data_organization_and_compression.html">神经网络数据组织与压缩</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../introduction/foundational_concepts/data_organization_and_compression.html#id2">数据类型</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../introduction/foundational_concepts/data_organization_and_compression.html#id3">连接关系压缩与存储方式</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../introduction/foundational_concepts/data_organization_and_compression.html#id3">存储与压缩</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../introduction/foundational_concepts/data_organization_and_compression.html#trusynapse">传统表示与 TruSynapse 方案</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../introduction/foundational_concepts/subnet_executor.html">子网执行体</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../introduction/foundational_concepts/subnet_executor.html#id2">子网执行体概述</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../introduction/foundational_concepts/subnet_executor.html#id3">子网执行体结构</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../introduction/foundational_concepts/subnet_executor.html#snndata">子网执行体数据结构SNNData</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../introduction/foundational_concepts/subnet_executor.html#id4">子网执行体内存管理</a></li>
 </ul>
 </li>
 </ul>
@@ -83,33 +83,34 @@
 <li class="toctree-l2"><a class="reference internal" href="installation.html">安装指南</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="installation.html#id2">系统要求</a></li>
 <li class="toctree-l3"><a class="reference internal" href="installation.html#id3">安装步骤</a></li>
-<li class="toctree-l3"><a class="reference internal" href="installation.html#id4">验证安装</a></li>
 </ul>
 </li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">数据准备</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id2">神经网络</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">神经网络定义</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id3">权重文件</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id4">输入数据</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="run_a_net.html">全栈神经网络运行</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="run_a_net.html#id2">全栈神经网络介绍</a></li>
-<li class="toctree-l3"><a class="reference internal" href="run_a_net.html#id3">构建神经网络</a></li>
-<li class="toctree-l3"><a class="reference internal" href="run_a_net.html#id4">转换连接关系数据</a></li>
-<li class="toctree-l3"><a class="reference internal" href="run_a_net.html#spike">输入spike数据</a></li>
-<li class="toctree-l3"><a class="reference internal" href="run_a_net.html#frameworknfu">调用framework构造NFU子网执行体</a></li>
-<li class="toctree-l3"><a class="reference internal" href="run_a_net.html#nfu">执行NFU子网执行体</a></li>
+<li class="toctree-l3"><a class="reference internal" href="run_a_net.html#id2">概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="run_a_net.html#id3">前置条件</a></li>
+<li class="toctree-l3"><a class="reference internal" href="run_a_net.html#net">1. 构建神经网络（net）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="run_a_net.html#connections">2. 转换连接关系数据（connections）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="run_a_net.html#inputdata">3. 准备输入脉冲（inputdata）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="run_a_net.html#nfu">4. 构造 NFU 子网执行体</a></li>
+<li class="toctree-l3"><a class="reference internal" href="run_a_net.html#id4">5. 执行 NFU 子网并获取输出</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="run_a_net.html#id5">外源神经网络应用</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="run_a_net.html#id6">外源神经网络介绍</a></li>
-<li class="toctree-l3"><a class="reference internal" href="run_a_net.html#id7">实例NFU子网执行体</a></li>
-<li class="toctree-l3"><a class="reference internal" href="run_a_net.html#id8">准备子网执行体各数据段数据</a></li>
+<li class="toctree-l3"><a class="reference internal" href="run_a_net.html#id6">概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="run_a_net.html#id7">步骤（示例代码）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="run_a_net.html#id8">注意事项（外源网络）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="run_a_net.html#id9">附录：常见问题与检查项</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../models/index.html">示例</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="../models/index.html">基础模型</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../models/mlp.html">多层感知机 (MLP)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../models/mlp.html#id1">模型概述</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../models/mlp.html#id2">实现代码</a></li>
@@ -171,9 +172,8 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../higher_level_use/index.html">高级使用</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../higher_level_use/neuron_model.html">神经元模型</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../higher_level_use/neuron_model.html#id2">模型介绍</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../higher_level_use/neuron_model.html#id3">参数说明</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../higher_level_use/neuron_model.html#id4">使用示例</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../higher_level_use/neuron_model.html#id2">7.1 汇编代码</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../higher_level_use/neuron_model.html#id3">7.2 事件语言</a></li>
 </ul>
 </li>
 </ul>
@@ -213,17 +213,82 @@
              
   <section id="id1">
 <h1>数据准备<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h1>
+<p>需要准备的数据包括：神经网络、网络训练权重及输入数据</p>
 <section id="id2">
-<h2>神经网络<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
-<p>TODO:</p>
+<h2>神经网络定义<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
+<p>首先需要对神经网络模型进行定义，比如一个MLP网络，定义示例如下：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">snntorch</span> <span class="k">as</span> <span class="nn">snn</span>
+<span class="linenos"> 2</span><span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+<span class="linenos"> 3</span><span class="k">class</span> <span class="nc">SNNMLP</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="linenos"> 4</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_neuron_num</span><span class="o">=</span><span class="mi">784</span><span class="p">,</span> <span class="n">hidden1</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span> <span class="n">hidden2</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">output_neuron_num</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mf">0.9</span><span class="p">):</span>
+<span class="linenos"> 5</span>        <span class="nb">super</span><span class="p">(</span><span class="n">SNNMLP</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+<span class="linenos"> 6</span>        <span class="bp">self</span><span class="o">.</span><span class="n">fc1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">input_neuron_num</span><span class="p">,</span> <span class="n">hidden1</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="linenos"> 7</span>        <span class="bp">self</span><span class="o">.</span><span class="n">lif1</span> <span class="o">=</span> <span class="n">snn</span><span class="o">.</span><span class="n">Leaky</span><span class="p">(</span><span class="n">beta</span><span class="o">=</span><span class="n">beta</span><span class="p">,</span> <span class="n">spike_grad</span><span class="o">=</span><span class="n">surrogate</span><span class="o">.</span><span class="n">fast_sigmoid</span><span class="p">())</span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span>        <span class="bp">self</span><span class="o">.</span><span class="n">fc2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden1</span><span class="p">,</span> <span class="n">hidden2</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="linenos">10</span>        <span class="bp">self</span><span class="o">.</span><span class="n">lif2</span> <span class="o">=</span> <span class="n">snn</span><span class="o">.</span><span class="n">Leaky</span><span class="p">(</span><span class="n">beta</span><span class="o">=</span><span class="n">beta</span><span class="p">,</span> <span class="n">spike_grad</span><span class="o">=</span><span class="n">surrogate</span><span class="o">.</span><span class="n">fast_sigmoid</span><span class="p">())</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span>        <span class="bp">self</span><span class="o">.</span><span class="n">fc3</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden2</span><span class="p">,</span> <span class="n">output_neuron_num</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="linenos">13</span>        <span class="bp">self</span><span class="o">.</span><span class="n">lif3</span> <span class="o">=</span> <span class="n">snn</span><span class="o">.</span><span class="n">Leaky</span><span class="p">(</span><span class="n">beta</span><span class="o">=</span><span class="n">beta</span><span class="p">,</span> <span class="n">spike_grad</span><span class="o">=</span><span class="n">surrogate</span><span class="o">.</span><span class="n">fast_sigmoid</span><span class="p">())</span>
+<span class="linenos">14</span>
+<span class="linenos">15</span>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="linenos">16</span>        <span class="n">mem1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lif1</span><span class="o">.</span><span class="n">init_leaky</span><span class="p">()</span>
+<span class="linenos">17</span>        <span class="n">mem2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lif2</span><span class="o">.</span><span class="n">init_leaky</span><span class="p">()</span>
+<span class="linenos">18</span>        <span class="n">mem3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lif3</span><span class="o">.</span><span class="n">init_leaky</span><span class="p">()</span>
+<span class="linenos">19</span>
+<span class="linenos">20</span>        <span class="n">spk1</span><span class="p">,</span> <span class="n">mem1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lif1</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fc1</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">mem1</span><span class="p">)</span>
+<span class="linenos">21</span>        <span class="n">spk2</span><span class="p">,</span> <span class="n">mem2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lif2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fc2</span><span class="p">(</span><span class="n">spk1</span><span class="p">),</span> <span class="n">mem2</span><span class="p">)</span>
+<span class="linenos">22</span>        <span class="n">spk3</span><span class="p">,</span> <span class="n">mem3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lif3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fc3</span><span class="p">(</span><span class="n">spk2</span><span class="p">),</span> <span class="n">mem3</span><span class="p">)</span>
+<span class="linenos">23</span>        <span class="k">return</span> <span class="n">spk3</span><span class="p">,</span> <span class="n">mem3</span>
+</pre></div>
+</div>
 </section>
 <section id="id3">
 <h2>权重文件<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h2>
-<p>TODO:</p>
+<p>权重文件通常是训练好的模型参数，保存为特定格式（如 .pkl 或 .pth 文件）。
+这些文件包含了神经网络中每层的权重和偏置信息，供后续映射使用。</p>
 </section>
 <section id="id4">
 <h2>输入数据<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h2>
-<p>TODO:</p>
+<p>由于类脑芯片只支持0，1两种状态的输入，因此需要将原始输入数据（如图像、文本等）转换为二值化格式。
+例如，对于图像数据，可以使用以下方法进行二值化：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="linenos">2</span>
+<span class="linenos">3</span><span class="k">def</span> <span class="nf">binarize_image</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
+<span class="linenos">4</span><span class="w">    </span><span class="sd">&quot;&quot;&quot;将图像数据二值化。</span>
+<span class="linenos">5</span><span class="sd">    :param image: 输入图像，形状为 (C, H, W)</span>
+<span class="linenos">6</span><span class="sd">    :param threshold: 二值化阈值</span>
+<span class="linenos">7</span><span class="sd">    :return: 二值化后的图像，形状为 (C, H, W)</span>
+<span class="linenos">8</span><span class="sd">    &quot;&quot;&quot;</span>
+<span class="linenos">9</span>    <span class="k">return</span> <span class="p">(</span><span class="n">image</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>我们也提供了函数 <code class="docutils literal notranslate"><span class="pre">convert_mnist_to_spike</span></code> 来生成二值化的 MNIST 数据集，供用户直接使用。
+该脚本会将 MNIST 数据集中的图像转换为二值化格式，并保存为 <a href="#id5"><span class="problematic" id="id6">``</span></a>inputdata.txt``文件，方便后续加载和使用。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">torchvision</span> <span class="kn">import</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">transforms</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="k">def</span> <span class="nf">convert_mnist_to_spike</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">thr</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">datapath</span><span class="o">=</span><span class="s1">&#39;./data&#39;</span><span class="p">):</span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span><span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert MNIST images to binary (spike) representation.</span>
+<span class="linenos"> 7</span><span class="sd">    :param n: int</span>
+<span class="linenos"> 8</span><span class="sd">    数据批次大小，指定要处理的样本数量或每个输出批次中的样本数（默认：100）。</span>
+<span class="linenos"> 9</span><span class="sd">    :param thr: float</span>
+<span class="linenos">10</span><span class="sd">    脉冲转化的阈值，像素值大于该阈值将被视为脉冲（1），否则为非脉冲（0）（默认：0.5）。</span>
+<span class="linenos">11</span><span class="sd">    &quot;&quot;&quot;</span>
+<span class="linenos">12</span>    <span class="n">test</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">MNIST</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="n">datapath</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">download</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="linenos">13</span>                          <span class="n">transform</span><span class="o">=</span><span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">())</span>
+<span class="linenos">14</span>    <span class="c1"># 脉冲转化</span>
+<span class="linenos">15</span>    <span class="n">spike</span> <span class="o">=</span> <span class="p">[(</span><span class="n">test</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">thr</span><span class="p">)</span><span class="o">.</span><span class="n">int</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="linenos">16</span>              <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">test</span><span class="p">)))]</span>
+<span class="linenos">17</span>
+<span class="linenos">18</span>    <span class="n">inputdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">spike</span><span class="p">)</span>
+<span class="linenos">19</span>    <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="s1">&#39;inputdata.txt&#39;</span><span class="p">,</span> <span class="n">inputdata</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="linenos">20</span>    <span class="k">return</span> <span class="n">inputdata</span>
+<span class="linenos">21</span>
+<span class="linenos">22</span><span class="n">inputdata</span> <span class="o">=</span> <span class="n">convert_mnist_to_spike</span><span class="p">()</span>
+</pre></div>
+</div>
 </section>
 </section>
 

@@ -97,7 +97,7 @@
     connection_input = connection_trans(connection_origin_value[0], 0, 1)
     connection_hidden1 = connection_trans(connection_origin_value[1], 784, 1)
     connection_output = connection_trans(connection_origin_value[2], 1296, 1)
-    connection = connection_input + connection_hidden1 + connection_output
+    connections = connection_input + connection_hidden1 + connection_output
 
 要点
 
@@ -146,7 +146,7 @@
     :linenos:
 
     from snntorch import functional
-    
+
     data = functional.framework(net, connections, inputdata)
 
 要点

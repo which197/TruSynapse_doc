@@ -31,7 +31,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="卷积神经网络 (CNN)" href="cnn.html" />
-    <link rel="prev" title="示例" href="index.html" /> 
+    <link rel="prev" title="基础模型" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -58,21 +58,21 @@
 <li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">介绍</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../introduction/tru_synapse_framework.html">TruSynapse 框架</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../introduction/tru_synapse_framework.html#id1">琴枢微处理器简介</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../introduction/tru_synapse_framework.html#id2">TruSynapse 框架定位与目标</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../introduction/tru_synapse_framework.html#id3">软件架构与层次视图</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../introduction/tru_synapse_framework.html#id2">软件架构与层次视图</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../introduction/tru_synapse_framework.html#id3">TruSynapse 框架定位与目标</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../introduction/foundational_concepts/index.html">基础概念</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../introduction/foundational_concepts/data_organization_and_compression.html">神经网络数据组织与压缩</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../introduction/foundational_concepts/data_organization_and_compression.html#id2">数据类型</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../introduction/foundational_concepts/data_organization_and_compression.html#id3">连接关系压缩与存储方式</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../introduction/foundational_concepts/data_organization_and_compression.html#id3">存储与压缩</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../introduction/foundational_concepts/data_organization_and_compression.html#trusynapse">传统表示与 TruSynapse 方案</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../introduction/foundational_concepts/subnet_executor.html">子网执行体</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../introduction/foundational_concepts/subnet_executor.html#id2">子网执行体概述</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../introduction/foundational_concepts/subnet_executor.html#id3">子网执行体结构</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../introduction/foundational_concepts/subnet_executor.html#snndata">子网执行体数据结构SNNData</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../introduction/foundational_concepts/subnet_executor.html#id4">子网执行体内存管理</a></li>
 </ul>
 </li>
 </ul>
@@ -93,23 +93,25 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../getting_started/run_a_net.html">全栈神经网络运行</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#id2">全栈神经网络介绍</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#id3">构建神经网络</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#id4">转换连接关系数据</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#spike">输入spike数据</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#frameworknfu">调用framework构造NFU子网执行体</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#nfu">执行NFU子网执行体</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#id2">概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#id3">前置条件</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#net">1. 构建神经网络（net）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#connections">2. 转换连接关系数据（connections）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#inputdata">3. 准备输入脉冲（inputdata）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#nfu">4. 构造 NFU 子网执行体</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#id4">5. 执行 NFU 子网并获取输出</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../getting_started/run_a_net.html#id5">外源神经网络应用</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#id6">外源神经网络介绍</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#id7">实例NFU子网执行体</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#id8">准备子网执行体各数据段数据</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#id6">概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#id7">步骤（示例代码）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#id8">注意事项（外源网络）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting_started/run_a_net.html#id9">附录：常见问题与检查项</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">示例</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">基础模型</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">多层感知机 (MLP)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id1">模型概述</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id2">实现代码</a></li>
@@ -171,9 +173,8 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../higher_level_use/index.html">高级使用</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../higher_level_use/neuron_model.html">神经元模型</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../higher_level_use/neuron_model.html#id2">模型介绍</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../higher_level_use/neuron_model.html#id3">参数说明</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../higher_level_use/neuron_model.html#id4">使用示例</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../higher_level_use/neuron_model.html#id2">7.1 汇编代码</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../higher_level_use/neuron_model.html#id3">7.2 事件语言</a></li>
 </ul>
 </li>
 </ul>
@@ -200,7 +201,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="index.html">示例</a></li>
+          <li class="breadcrumb-item"><a href="index.html">基础模型</a></li>
       <li class="breadcrumb-item active">多层感知机 (MLP)</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/models/mlp.rst.txt" rel="nofollow"> View page source</a>
@@ -215,11 +216,137 @@
 <h1>多层感知机 (MLP)<a class="headerlink" href="#mlp" title="Permalink to this heading"></a></h1>
 <section id="id1">
 <h2>模型概述<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
-<p>TODO: 添加MLP模型概述</p>
+<p>该示例任务是对MNIST手写数字数据集图片进行分类，模型总共分为四层：</p>
+<p>输入层：包含784个神经元，一个批次接收784个神经脉冲</p>
+<p>隐藏层1:包含512个神经元，与输入层之间为全连接的方式进行连接</p>
+<p>隐藏层2:包含256个神经元，与隐藏层1之间为全连接的方式进行连接</p>
+<p>输出层：包含10个神经元，与隐藏层2之间为全连接的方式进行连接</p>
+<p>所以：该示例总共包含1562个神经元，总连接数为535040条</p>
 </section>
 <section id="id2">
 <h2>实现代码<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
-<p>TODO: 添加实现代码</p>
+<p>1、网络描述</p>
+<blockquote>
+<div><dl>
+<dt>class MnistSNN(nn.Module):</dt><dd><p>def __init__(self, input_neuron_num=784, hidden1=512, hidden2=256, output_neuron_num=10, beta=0.9):</p>
+<blockquote>
+<div><p>super(MnistSNN, self).__init__()</p>
+<p>self.fc1 = nn.Linear(input_neuron_num, hidden1, bias=False)</p>
+<p>self.lif1 = snn.Leaky(beta=beta, spike_grad=surrogate.fast_sigmoid())</p>
+<p>self.fc2 = nn.Linear(hidden1, hidden2, bias=False)</p>
+<p>self.lif2 = snn.Leaky(beta=beta, spike_grad=surrogate.fast_sigmoid())</p>
+<p>self.fc3 = nn.Linear(hidden2, output_neuron_num, bias=False)</p>
+<p>self.lif3 = snn.Leaky(beta=beta, spike_grad=surrogate.fast_sigmoid())</p>
+</div></blockquote>
+<p>def forward(self, x):</p>
+<blockquote>
+<div><p>mem1 = self.lif1.init_leaky()</p>
+<p>mem2 = self.lif2.init_leaky()</p>
+<p>mem3 = self.lif3.init_leaky()</p>
+<p>spk1, mem1 = self.lif1(self.fc1(x), mem1)</p>
+<p>spk2, mem2 = self.lif2(self.fc2(spk1), mem2)</p>
+<p>spk3, mem3 = self.lif3(self.fc3(spk2), mem3)</p>
+<p>return spk3, mem3</p>
+</div></blockquote>
+</dd>
+</dl>
+<p>net = MnistSNN(input_neuron_num=784, hidden1=512, hidden2=256, output_neuron_num=10, beta=0.9)</p>
+</div></blockquote>
+<p>2、连接关系导入</p>
+<p>连接关系以pickle文件形式给出，其内包含多个字典，表征层与层之间的连接关系与连接权重：</p>
+<blockquote>
+<div><p>connection_file = “/your/path/to/connection.pkl”</p>
+<p>connection_origin_value = []</p>
+<p>with open(connection_file, ‘rb’) as pk:</p>
+<blockquote>
+<div><p>connection_value = pickle.load(pk)</p>
+</div></blockquote>
+<p>for key, value in connection_value.items():</p>
+<blockquote>
+<div><p>if ‘weight’ in key:</p>
+<blockquote>
+<div><p>connection_origin_value.append(value.T)</p>
+</div></blockquote>
+</div></blockquote>
+<p>connection_input = connection_trans(connection_origin_value[0], 0, 1)</p>
+<p>connection_hidden1 = connection_trans(connection_origin_value[1], 784, 1)</p>
+<p>connection_output = connection_trans(connection_origin_value[2], 1296, 1)</p>
+<p>connections = connection_input + connection_hidden1 + connection_output</p>
+</div></blockquote>
+<p>3、输入数据准备</p>
+<p>输入数据只能包含0或1，以txt文件给出：</p>
+<blockquote>
+<div><p>with open(“/your/path/to/inputdata.txt”) as file:</p>
+<blockquote>
+<div><p>inputdata = file.readlines()</p>
+</div></blockquote>
+</div></blockquote>
+<p>4、调用框架启动NFU</p>
+<blockquote>
+<div><p>data = functional.framework(net,connections,inputdata)</p>
+<p>net_output = functional.run(data)</p>
+</div></blockquote>
+<p>总体代码：</p>
+<blockquote>
+<div><p>from snntorch import functional</p>
+<p>import snntorch as snn</p>
+<p>import torch.nn as nn</p>
+<p>import pickle</p>
+<p>class MnistSNN(nn.Module):</p>
+<blockquote>
+<div><p>def __init__(self, input_neuron_num=784, hidden1=512, hidden2=256, output_neuron_num=10, beta=0.9):</p>
+<blockquote>
+<div><p>super(MnistSNN, self).__init__()</p>
+<p>self.fc1 = nn.Linear(input_neuron_num, hidden1, bias=False)</p>
+<p>self.lif1 = snn.Leaky(beta=beta, spike_grad=surrogate.fast_sigmoid())</p>
+<p>self.fc2 = nn.Linear(hidden1, hidden2, bias=False)</p>
+<p>self.lif2 = snn.Leaky(beta=beta, spike_grad=surrogate.fast_sigmoid())</p>
+<p>self.fc3 = nn.Linear(hidden2, output_neuron_num, bias=False)</p>
+<p>self.lif3 = snn.Leaky(beta=beta, spike_grad=surrogate.fast_sigmoid())</p>
+</div></blockquote>
+<p>def forward(self, x):</p>
+<blockquote>
+<div><p>mem1 = self.lif1.init_leaky()</p>
+<p>mem2 = self.lif2.init_leaky()</p>
+<p>mem3 = self.lif3.init_leaky()</p>
+<p>spk1, mem1 = self.lif1(self.fc1(x), mem1)</p>
+<p>spk2, mem2 = self.lif2(self.fc2(spk1), mem2)</p>
+<p>spk3, mem3 = self.lif3(self.fc3(spk2), mem3)</p>
+<p>return spk3, mem3</p>
+</div></blockquote>
+</div></blockquote>
+<p>net = MnistSNN(input_neuron_num=784, hidden1=512, hidden2=256, output_neuron_num=10, beta=0.9)</p>
+<p>connection_file = “/your/path/to/connection.pkl”</p>
+<p>connection_origin_value = []</p>
+<p>with open(connection_file, ‘rb’) as pk:</p>
+<blockquote>
+<div><p>connection_value = pickle.load(pk)</p>
+</div></blockquote>
+<p>for key, value in connection_value.items():</p>
+<blockquote>
+<div><p>if ‘weight’ in key:</p>
+<blockquote>
+<div><p>connection_origin_value.append(value.T)</p>
+</div></blockquote>
+</div></blockquote>
+<p>connection_input = connection_trans(connection_origin_value[0], 0, 1)</p>
+<p>connection_hidden1 = connection_trans(connection_origin_value[1], 784, 1)</p>
+<p>connection_output = connection_trans(connection_origin_value[2], 1296, 1)</p>
+<p>connections = connection_input + connection_hidden1 + connection_output</p>
+<p>with open(“/your/path/to/inputdata.txt”) as file:</p>
+<blockquote>
+<div><p>inputdata = file.readlines()</p>
+</div></blockquote>
+<p>def main():</p>
+<blockquote>
+<div><p>data = functional.framework(net,connections,inputdata)</p>
+<p>net_output = functional.run(data)</p>
+</div></blockquote>
+<p>if __name__ == “__main__”:</p>
+<blockquote>
+<div><p>main()</p>
+</div></blockquote>
+</div></blockquote>
 </section>
 <section id="id3">
 <h2>运行结果<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h2>
@@ -231,7 +358,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="index.html" class="btn btn-neutral float-left" title="示例" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral float-left" title="基础模型" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="cnn.html" class="btn btn-neutral float-right" title="卷积神经网络 (CNN)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
