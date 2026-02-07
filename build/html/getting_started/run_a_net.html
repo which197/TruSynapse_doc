@@ -173,9 +173,8 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../higher_level_use/index.html">高级使用</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../higher_level_use/neuron_model.html">神经元模型</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../higher_level_use/neuron_model.html#id2">模型介绍</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../higher_level_use/neuron_model.html#id3">参数说明</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../higher_level_use/neuron_model.html#id4">使用示例</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../higher_level_use/neuron_model.html#id2">7.1 汇编代码</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../higher_level_use/neuron_model.html#id3">7.2 事件语言</a></li>
 </ul>
 </li>
 </ul>
@@ -230,35 +229,39 @@
 <section id="net">
 <h2>1. 构建神经网络（net）<a class="headerlink" href="#net" title="Permalink to this heading"></a></h2>
 <p>描述网络结构（层次、每层神经元数、必要的神经元/层参数等），并将网络信息保存为变量（例如 <cite>net</cite>），供后续映射使用。</p>
-<p>示例（PyTorch 风格）：</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">class</span> <span class="nc">SNNMLP</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-<span class="linenos"> 2</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_neuron_num</span><span class="o">=</span><span class="mi">784</span><span class="p">,</span> <span class="n">hidden1</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span> <span class="n">hidden2</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">output_neuron_num</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mf">0.9</span><span class="p">):</span>
-<span class="linenos"> 3</span>        <span class="nb">super</span><span class="p">(</span><span class="n">SNNMLP</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-<span class="linenos"> 4</span>        <span class="bp">self</span><span class="o">.</span><span class="n">fc1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">input_neuron_num</span><span class="p">,</span> <span class="n">hidden1</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="linenos"> 5</span>        <span class="bp">self</span><span class="o">.</span><span class="n">lif1</span> <span class="o">=</span> <span class="n">snn</span><span class="o">.</span><span class="n">Leaky</span><span class="p">(</span><span class="n">beta</span><span class="o">=</span><span class="n">beta</span><span class="p">,</span> <span class="n">spike_grad</span><span class="o">=</span><span class="n">surrogate</span><span class="o">.</span><span class="n">fast_sigmoid</span><span class="p">())</span>
-<span class="linenos"> 6</span>
-<span class="linenos"> 7</span>        <span class="bp">self</span><span class="o">.</span><span class="n">fc2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden1</span><span class="p">,</span> <span class="n">hidden2</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="linenos"> 8</span>        <span class="bp">self</span><span class="o">.</span><span class="n">lif2</span> <span class="o">=</span> <span class="n">snn</span><span class="o">.</span><span class="n">Leaky</span><span class="p">(</span><span class="n">beta</span><span class="o">=</span><span class="n">beta</span><span class="p">,</span> <span class="n">spike_grad</span><span class="o">=</span><span class="n">surrogate</span><span class="o">.</span><span class="n">fast_sigmoid</span><span class="p">())</span>
-<span class="linenos"> 9</span>
-<span class="linenos">10</span>        <span class="bp">self</span><span class="o">.</span><span class="n">fc3</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden2</span><span class="p">,</span> <span class="n">output_neuron_num</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="linenos">11</span>        <span class="bp">self</span><span class="o">.</span><span class="n">lif3</span> <span class="o">=</span> <span class="n">snn</span><span class="o">.</span><span class="n">Leaky</span><span class="p">(</span><span class="n">beta</span><span class="o">=</span><span class="n">beta</span><span class="p">,</span> <span class="n">spike_grad</span><span class="o">=</span><span class="n">surrogate</span><span class="o">.</span><span class="n">fast_sigmoid</span><span class="p">())</span>
-<span class="linenos">12</span>
-<span class="linenos">13</span>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-<span class="linenos">14</span>        <span class="n">mem1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lif1</span><span class="o">.</span><span class="n">init_leaky</span><span class="p">()</span>
-<span class="linenos">15</span>        <span class="n">mem2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lif2</span><span class="o">.</span><span class="n">init_leaky</span><span class="p">()</span>
-<span class="linenos">16</span>        <span class="n">mem3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lif3</span><span class="o">.</span><span class="n">init_leaky</span><span class="p">()</span>
-<span class="linenos">17</span>
-<span class="linenos">18</span>        <span class="n">spk1</span><span class="p">,</span> <span class="n">mem1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lif1</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fc1</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">mem1</span><span class="p">)</span>
-<span class="linenos">19</span>        <span class="n">spk2</span><span class="p">,</span> <span class="n">mem2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lif2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fc2</span><span class="p">(</span><span class="n">spk1</span><span class="p">),</span> <span class="n">mem2</span><span class="p">)</span>
-<span class="linenos">20</span>        <span class="n">spk3</span><span class="p">,</span> <span class="n">mem3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lif3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fc3</span><span class="p">(</span><span class="n">spk2</span><span class="p">),</span> <span class="n">mem3</span><span class="p">)</span>
-<span class="linenos">21</span>        <span class="k">return</span> <span class="n">spk3</span><span class="p">,</span> <span class="n">mem3</span>
-<span class="linenos">22</span>
-<span class="linenos">23</span><span class="n">net</span> <span class="o">=</span> <span class="n">SNNMLP</span><span class="p">()</span>
+<p>示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">snntorch</span> <span class="k">as</span> <span class="nn">snn</span>
+<span class="linenos"> 2</span><span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+<span class="linenos"> 3</span><span class="k">class</span> <span class="nc">SNNMLP</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="linenos"> 4</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_neuron_num</span><span class="o">=</span><span class="mi">784</span><span class="p">,</span> <span class="n">hidden1</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span> <span class="n">hidden2</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">output_neuron_num</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mf">0.9</span><span class="p">):</span>
+<span class="linenos"> 5</span>        <span class="nb">super</span><span class="p">(</span><span class="n">SNNMLP</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+<span class="linenos"> 6</span>        <span class="bp">self</span><span class="o">.</span><span class="n">fc1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">input_neuron_num</span><span class="p">,</span> <span class="n">hidden1</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="linenos"> 7</span>        <span class="bp">self</span><span class="o">.</span><span class="n">lif1</span> <span class="o">=</span> <span class="n">snn</span><span class="o">.</span><span class="n">Leaky</span><span class="p">(</span><span class="n">beta</span><span class="o">=</span><span class="n">beta</span><span class="p">,</span> <span class="n">spike_grad</span><span class="o">=</span><span class="n">surrogate</span><span class="o">.</span><span class="n">fast_sigmoid</span><span class="p">())</span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span>        <span class="bp">self</span><span class="o">.</span><span class="n">fc2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden1</span><span class="p">,</span> <span class="n">hidden2</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="linenos">10</span>        <span class="bp">self</span><span class="o">.</span><span class="n">lif2</span> <span class="o">=</span> <span class="n">snn</span><span class="o">.</span><span class="n">Leaky</span><span class="p">(</span><span class="n">beta</span><span class="o">=</span><span class="n">beta</span><span class="p">,</span> <span class="n">spike_grad</span><span class="o">=</span><span class="n">surrogate</span><span class="o">.</span><span class="n">fast_sigmoid</span><span class="p">())</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span>        <span class="bp">self</span><span class="o">.</span><span class="n">fc3</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden2</span><span class="p">,</span> <span class="n">output_neuron_num</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="linenos">13</span>        <span class="bp">self</span><span class="o">.</span><span class="n">lif3</span> <span class="o">=</span> <span class="n">snn</span><span class="o">.</span><span class="n">Leaky</span><span class="p">(</span><span class="n">beta</span><span class="o">=</span><span class="n">beta</span><span class="p">,</span> <span class="n">spike_grad</span><span class="o">=</span><span class="n">surrogate</span><span class="o">.</span><span class="n">fast_sigmoid</span><span class="p">())</span>
+<span class="linenos">14</span>
+<span class="linenos">15</span>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="linenos">16</span>        <span class="n">mem1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lif1</span><span class="o">.</span><span class="n">init_leaky</span><span class="p">()</span>
+<span class="linenos">17</span>        <span class="n">mem2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lif2</span><span class="o">.</span><span class="n">init_leaky</span><span class="p">()</span>
+<span class="linenos">18</span>        <span class="n">mem3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lif3</span><span class="o">.</span><span class="n">init_leaky</span><span class="p">()</span>
+<span class="linenos">19</span>
+<span class="linenos">20</span>        <span class="n">spk1</span><span class="p">,</span> <span class="n">mem1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lif1</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fc1</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">mem1</span><span class="p">)</span>
+<span class="linenos">21</span>        <span class="n">spk2</span><span class="p">,</span> <span class="n">mem2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lif2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fc2</span><span class="p">(</span><span class="n">spk1</span><span class="p">),</span> <span class="n">mem2</span><span class="p">)</span>
+<span class="linenos">22</span>        <span class="n">spk3</span><span class="p">,</span> <span class="n">mem3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lif3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fc3</span><span class="p">(</span><span class="n">spk2</span><span class="p">),</span> <span class="n">mem3</span><span class="p">)</span>
+<span class="linenos">23</span>        <span class="k">return</span> <span class="n">spk3</span><span class="p">,</span> <span class="n">mem3</span>
+<span class="linenos">24</span>
+<span class="linenos">25</span><span class="n">net</span> <span class="o">=</span> <span class="n">SNNMLP</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>要点
-- 将网络实例保存为 <cite>net</cite>，供后续框架映射接口使用。
-- 确认每层的神经元数目与后续连接矩阵一致。</p>
+<p>要点</p>
+<ul class="simple">
+<li><p>将网络实例保存为 <cite>net</cite>，供后续框架映射接口使用。</p></li>
+<li><p>确认每层的神经元数目与后续连接矩阵一致。</p></li>
+</ul>
 </section>
 <section id="connections">
 <h2>2. 转换连接关系数据（connections）<a class="headerlink" href="#connections" title="Permalink to this heading"></a></h2>
@@ -283,32 +286,72 @@
 <span class="linenos">17</span>                <span class="n">weight</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">connection_tensor</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
 <span class="linenos">18</span>                <span class="n">triplets</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">src_id</span><span class="p">,</span> <span class="n">dst_id</span><span class="p">,</span> <span class="n">weight</span><span class="p">))</span>
 <span class="linenos">19</span>    <span class="k">return</span> <span class="n">triplets</span>
+<span class="linenos">20</span>
+<span class="linenos">21</span>
+<span class="linenos">22</span><span class="n">connection_file</span> <span class="o">=</span> <span class="s2">&quot;./mnist_snn.pkl&quot;</span>
+<span class="linenos">23</span><span class="n">connection_origin_value</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="linenos">24</span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">connection_file</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">pk</span><span class="p">:</span>
+<span class="linenos">25</span>    <span class="n">connection_value</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">pk</span><span class="p">)</span>
+<span class="linenos">26</span>
+<span class="linenos">27</span><span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">connection_value</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="linenos">28</span>    <span class="k">if</span> <span class="s1">&#39;weight&#39;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+<span class="linenos">29</span>        <span class="n">connection_origin_value</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+<span class="linenos">30</span>
+<span class="linenos">31</span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">connection_origin_value</span><span class="p">:</span>
+<span class="linenos">32</span>    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="linenos">33</span>
+<span class="linenos">34</span><span class="n">connection_input</span> <span class="o">=</span> <span class="n">connection_trans</span><span class="p">(</span><span class="n">connection_origin_value</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="linenos">35</span><span class="n">connection_hidden1</span> <span class="o">=</span> <span class="n">connection_trans</span><span class="p">(</span><span class="n">connection_origin_value</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">784</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="linenos">36</span><span class="n">connection_output</span> <span class="o">=</span> <span class="n">connection_trans</span><span class="p">(</span><span class="n">connection_origin_value</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">1296</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="linenos">37</span><span class="n">connection</span> <span class="o">=</span> <span class="n">connection_input</span> <span class="o">+</span> <span class="n">connection_hidden1</span> <span class="o">+</span> <span class="n">connection_output</span>
 </pre></div>
 </div>
-<p>要点
-- 输入常为二维张量（邻接矩阵）、源层起始 ID 以及子模块数量。
-- 返回的三元组应与框架 <cite>connections</cite> 字段格式一致，检查 ID 编号是否越界。</p>
+<p>要点</p>
+<ul class="simple">
+<li><p>输入常为二维张量（邻接矩阵）、源层起始 ID 以及子模块数量。</p></li>
+<li><p>返回的三元组应与框架 <cite>connections</cite> 字段格式一致，检查 ID 编号是否越界。</p></li>
+</ul>
 </section>
 <section id="inputdata">
 <h2>3. 准备输入脉冲（inputdata）<a class="headerlink" href="#inputdata" title="Permalink to this heading"></a></h2>
 <p>输入应为一维列表，元素为 0 或 1，长度等于输入层神经元数。</p>
 <p>示例：</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">inputdata</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>  <span class="c1"># 长度应等于 input 层大小</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">def</span> <span class="nf">convert_mnist_to_spike</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">thr</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">datapath</span><span class="o">=</span><span class="s1">&#39;./data&#39;</span><span class="p">):</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert MNIST images to binary (spike) representation.</span>
+<span class="linenos"> 4</span><span class="sd">    :param n: int</span>
+<span class="linenos"> 5</span><span class="sd">    数据批次大小，指定要处理的样本数量或每个输出批次中的样本数（默认：100）。</span>
+<span class="linenos"> 6</span><span class="sd">    :param thr: float</span>
+<span class="linenos"> 7</span><span class="sd">    脉冲转化的阈值，像素值大于该阈值将被视为脉冲（1），否则为非脉冲（0）（默认：0.5）。</span>
+<span class="linenos"> 8</span><span class="sd">    &quot;&quot;&quot;</span>
+<span class="linenos"> 9</span>    <span class="n">test</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">MNIST</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="n">datapath</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">download</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="linenos">10</span>                          <span class="n">transform</span><span class="o">=</span><span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">())</span>
+<span class="linenos">11</span>    <span class="c1"># 脉冲转化</span>
+<span class="linenos">12</span>    <span class="n">spike</span> <span class="o">=</span> <span class="p">[(</span><span class="n">test</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">thr</span><span class="p">)</span><span class="o">.</span><span class="n">int</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="linenos">13</span>              <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">test</span><span class="p">)))]</span>
+<span class="linenos">14</span>
+<span class="linenos">15</span>    <span class="n">inputdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">spike</span><span class="p">)</span>
+<span class="linenos">16</span>    <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="s1">&#39;inputdata.txt&#39;</span><span class="p">,</span> <span class="n">inputdata</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="linenos">17</span>    <span class="k">return</span> <span class="n">inputdata</span>
+<span class="linenos">18</span>
+<span class="linenos">19</span><span class="n">inputdata</span> <span class="o">=</span> <span class="n">convert_mnist_to_spike</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>注意
-- 若为多时刻或批量输入，请根据框架要求组织数据维度。</p>
 </section>
 <section id="nfu">
 <h2>4. 构造 NFU 子网执行体<a class="headerlink" href="#nfu" title="Permalink to this heading"></a></h2>
 <p>使用框架接口将网络、连接和输入组合成可执行的数据结构（示例接口名使用 <cite>functional.framework</cite>）。</p>
 <p>示例：</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">data</span> <span class="o">=</span> <span class="n">functional</span><span class="o">.</span><span class="n">framework</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">connections</span><span class="p">,</span> <span class="n">inputdata</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">from</span> <span class="nn">snntorch</span> <span class="kn">import</span> <span class="n">functional</span>
+<span class="linenos">2</span>
+<span class="linenos">3</span><span class="n">data</span> <span class="o">=</span> <span class="n">functional</span><span class="o">.</span><span class="n">framework</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">connections</span><span class="p">,</span> <span class="n">inputdata</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>要点
-- <cite>functional.framework</cite> 的实际参数和返回结构以所使用的 TruSynapse 版本为准。
-- 构造完成后，可对 <cite>data</cite> 进行简单验证（字段完整性、长度一致性等）。</p>
+<p>要点</p>
+<ul class="simple">
+<li><p><cite>functional.framework</cite> 的实际参数和返回结构以所使用的 TruSynapse 版本为准。</p></li>
+<li><p>构造完成后，可对 <cite>data</cite> 进行简单验证（字段完整性、长度一致性等）。</p></li>
+</ul>
 </section>
 <section id="id4">
 <h2>5. 执行 NFU 子网并获取输出<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h2>
@@ -317,9 +360,11 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">net_output</span> <span class="o">=</span> <span class="n">functional</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>说明
-- <cite>net_output</cite> 的格式取决于框架定义，通常包含各层或每个神经元的输出信息。
-- 执行前请确保 <cite>net</cite>、<cite>connections</cite> 与 <cite>inputdata</cite> 三者维度和索引一致，避免越界或 ID 错误。</p>
+<p>说明</p>
+<ul class="simple">
+<li><p><cite>net_output</cite> 的格式取决于框架定义，通常包含各层或每个神经元的输出信息。</p></li>
+<li><p>执行前请确保 <cite>net</cite>、 <cite>connections</cite> 与 <cite>inputdata</cite> 三者维度和索引一致，避免越界或 ID 错误。</p></li>
+</ul>
 </section>
 </section>
 <section id="id5">

@@ -7,6 +7,7 @@
 
 前置条件
 --------
+
 - 已安装并能导入 TruSynapse 框架对应的 Python 包（例如 `functional`、`SNNData`、`SNNDriver` 等）。
 - 熟悉 PyTorch 风格的模块定义（示例中使用 `nn.Module`）。
 - 已导入必要模块（如 `torch`、`numpy as np`、`ctypes` 等）。
@@ -15,11 +16,13 @@
 ----------------------
 描述网络结构（层次、每层神经元数、必要的神经元/层参数等），并将网络信息保存为变量（例如 `net`），供后续映射使用。
 
-示例（PyTorch 风格）：
+示例：
 
 .. code-block:: python
     :linenos:
 
+    import snntorch as snn
+    import torch.nn as nn
     class SNNMLP(nn.Module):
         def __init__(self, input_neuron_num=784, hidden1=512, hidden2=256, output_neuron_num=10, beta=0.9):
             super(SNNMLP, self).__init__()
@@ -45,6 +48,7 @@
     net = SNNMLP()
 
 要点
+
 - 将网络实例保存为 `net`，供后续框架映射接口使用。
 - 确认每层的神经元数目与后续连接矩阵一致。
 
@@ -77,7 +81,26 @@
                     triplets.append((src_id, dst_id, weight))
         return triplets
 
+
+    connection_file = "./mnist_snn.pkl"
+    connection_origin_value = []
+    with open(connection_file, 'rb') as pk:
+        connection_value = pickle.load(pk)
+    
+    for key, value in connection_value.items():
+        if 'weight' in key:
+            connection_origin_value.append(value.T)
+    
+    for i in connection_origin_value:
+        print(i.shape)
+    
+    connection_input = connection_trans(connection_origin_value[0], 0, 1)
+    connection_hidden1 = connection_trans(connection_origin_value[1], 784, 1)
+    connection_output = connection_trans(connection_origin_value[2], 1296, 1)
+    connections = connection_input + connection_hidden1 + connection_output
+
 要点
+
 - 输入常为二维张量（邻接矩阵）、源层起始 ID 以及子模块数量。
 - 返回的三元组应与框架 `connections` 字段格式一致，检查 ID 编号是否越界。
 
@@ -85,15 +108,33 @@
 -----------------------------
 输入应为一维列表，元素为 0 或 1，长度等于输入层神经元数。
 
+
 示例：
 
 .. code-block:: python
     :linenos:
+    
 
-    inputdata = [0, 1, 0, 0, 1, ...]  # 长度应等于 input 层大小
+    def convert_mnist_to_spike(n=100, thr=0.5, datapath='./data'):
 
-注意
-- 若为多时刻或批量输入，请根据框架要求组织数据维度。
+        """Convert MNIST images to binary (spike) representation.
+        :param n: int
+        数据批次大小，指定要处理的样本数量或每个输出批次中的样本数（默认：100）。
+        :param thr: float
+        脉冲转化的阈值，像素值大于该阈值将被视为脉冲（1），否则为非脉冲（0）（默认：0.5）。
+        """
+        test = datasets.MNIST(root=datapath, train=False, download=True,
+                              transform=transforms.ToTensor())
+        # 脉冲转化
+        spike = [(test[i][0].view(-1) > thr).int().numpy() 
+                  for i in range(min(n, len(test)))]
+
+        inputdata = np.concatenate(spike)
+        np.savetxt('inputdata.txt', inputdata, fmt='%d')
+        return inputdata
+
+    inputdata = convert_mnist_to_spike()  
+
 
 4. 构造 NFU 子网执行体
 -----------------------
@@ -104,9 +145,12 @@
 .. code-block:: python
     :linenos:
 
+    from snntorch import functional
+
     data = functional.framework(net, connections, inputdata)
 
 要点
+
 - `functional.framework` 的实际参数和返回结构以所使用的 TruSynapse 版本为准。
 - 构造完成后，可对 `data` 进行简单验证（字段完整性、长度一致性等）。
 
@@ -122,8 +166,9 @@
     net_output = functional.run(data)
 
 说明
+
 - `net_output` 的格式取决于框架定义，通常包含各层或每个神经元的输出信息。
-- 执行前请确保 `net`、`connections` 与 `inputdata` 三者维度和索引一致，避免越界或 ID 错误。
+- 执行前请确保 `net`、 `connections` 与 `inputdata` 三者维度和索引一致，避免越界或 ID 错误。
 
 外源神经网络应用
 =================
