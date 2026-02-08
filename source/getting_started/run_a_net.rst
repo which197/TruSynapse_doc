@@ -147,12 +147,8 @@
 
     from snntorch import functional
 
-    data = functional.framework(net, connections, inputdata)
+    data = functional.framework(net, connections, inputdata) # 暂时还没有具体接口，示例仅供参考
 
-要点
-
-- `functional.framework` 的实际参数和返回结构以所使用的 TruSynapse 版本为准。
-- 构造完成后，可对 `data` 进行简单验证（字段完整性、长度一致性等）。
 
 5. 执行 NFU 子网并获取输出
 ---------------------------
@@ -163,12 +159,14 @@
 .. code-block:: python
     :linenos:
 
-    net_output = functional.run(data)
+    net_output = functional.run(data) # 暂时还没有具体接口，示例仅供参考
 
 说明
 
 - `net_output` 的格式取决于框架定义，通常包含各层或每个神经元的输出信息。
 - 执行前请确保 `net`、 `connections` 与 `inputdata` 三者维度和索引一致，避免越界或 ID 错误。
+
+6. 
 
 外源神经网络应用
 =================
