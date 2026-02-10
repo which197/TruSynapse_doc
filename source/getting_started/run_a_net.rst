@@ -1,16 +1,17 @@
-全栈神经网络运行
+从头搭建神经网络
 =================
 
 概述
 ----
-本示例展示如何使用 TruSynapse 框架将一个三层前向传播全连接神经网络映射到 NFU 并启动计算。文档按流程分为网络构建、连接转换、输入准备、构造子网执行体与执行五个部分，并给出外源神经网络的调用示例。
+本示例展示如何使用 TruSynapse 框架将一个三层前向传播全连接神经网络映射到 NFU 并启动计算。
+文档按流程分为网络构建、连接转换、输入准备、构造子网执行体与执行五个部分。
 
 前置条件
 --------
 
-- 已安装并能导入 TruSynapse 框架对应的 Python 包（例如 `functional`、`SNNData`、`SNNDriver` 等）。
+- 已安装并能导入 TruSynapse 框架对应的 Python 包（例如 `functional`、 `SNNData`、 `SNNDriver` 等）。
 - 熟悉 PyTorch 风格的模块定义（示例中使用 `nn.Module`）。
-- 已导入必要模块（如 `torch`、`numpy as np`、`ctypes` 等）。
+- 已导入必要模块（如 `torch`、 `snntorch` 等）。
 
 1. 构建神经网络（net）
 ----------------------
@@ -147,7 +148,7 @@
 
     from snntorch import functional
 
-    data = functional.framework(net, connections, inputdata) # 暂时还没有具体接口，示例仅供参考
+    data = functional.framework(net, connections, inputdata) 
 
 
 5. 执行 NFU 子网并获取输出
@@ -159,25 +160,20 @@
 .. code-block:: python
     :linenos:
 
-    net_output = functional.run(data) # 暂时还没有具体接口，示例仅供参考
+    net_output = functional.run(data) 
 
-说明
 
-- `net_output` 的格式取决于框架定义，通常包含各层或每个神经元的输出信息。
-- 执行前请确保 `net`、 `connections` 与 `inputdata` 三者维度和索引一致，避免越界或 ID 错误。
-
-6. 
-
-外源神经网络应用
+导入已训练神经网络
 =================
 概述
 ----
-对于外源神经网络（例如 Deepseek、千问 等），网络结构和参数来自外部资源，需构建 NFU 子网执行体（SNNData）并调用底层驱动执行。下面示例按典型的 5 个步骤给出参考实现。
+对于已训练好的神经网络（例如 Deepseek、千问 等），网络结构和参数来自外部资源，需构建 NFU 子网执行体（SNNData）并调用底层驱动执行。
+下面示例按典型的 5 个步骤给出参考实现。
 
 步骤（示例代码）
 ----------------
 
-1) 实例化 NFU 子网执行体
+1. 实例化 NFU 子网执行体
 
 .. code-block:: python
     :linenos:
@@ -185,7 +181,7 @@
     # 实例化一个 SNNData 子网执行体
     snn_data = SNNData()
 
-2) 填充子网执行体各字段（示例）
+2. 填充子网执行体各字段（示例）
 
 .. code-block:: python
     :linenos:
@@ -227,7 +223,7 @@
     snn_data.output_data = None
     snn_data.output_len = 0
 
-3) 执行子网
+3. 执行子网
 
 .. code-block:: python
     :linenos:
@@ -235,7 +231,7 @@
     driver = SNNDriver()
     driver.execute(ctypes.byref(snn_data))
 
-4) 处理子网输出
+4. 处理子网输出
 
 .. code-block:: python
     :linenos:
@@ -244,22 +240,30 @@
         output_array = ctypes.cast(snn_data.output_data, POINTER(c_uint32 * snn_data.output_len))
         output_results = [output_array.contents[i] for i in range(snn_data.output_len)]
 
-5) 回收子网执行体资源
+5. 回收子网执行体资源
 
 .. code-block:: python
     :linenos:
 
     driver.free_output(ctypes.byref(snn_data))
 
-注意事项（外源网络）
---------------------
-- 数据类型与长度必须与底层驱动接口一致（例如 uint32/uint64 区分）。
-- 对于大规模数据，优先在小样本上验证端到端流程再批量运行。
-- 若网络参数来源于文件，请确保解析后按上述字段正确填充 `snn_data`。
 
-附录：常见问题与检查项
----------------------
-- ID 编号是否从 0 或 1 开始，并与连接三元组一致；
-- 连通性矩阵维度是否与声明的神经元数匹配；
-- ctypes 数组长度与对应 *_len 字段是否一致；
-- 执行异常时，先检查输入数据格式与驱动错误返回码。
+搭建混合神经网络
+===============
+作为一款类脑CPU的框架，TruSynapse 除了支持常规的脉冲神经网络外，还能支持ANN/SNN混合神经网络。
+用户可以将部分子网部署在 NFU 上执行，而其他子网继续在 CPU 上运行，从而实现性能与灵活性的平衡。
+
+.. figure:: ../../_static/images/hybrid_network.png
+   :alt: Hybrid Neural Network
+   :width: 80%
+   :align: center
+
+   ANN/SNN混合神经网络示例
+
+下面给出一个简单的示例，演示如何在 Trusynapse 中搭建一个混合神经网络。
+
+
+.. code-block:: python
+    :linenos:
+
+    to do: 添加混合神经网络示例代码
