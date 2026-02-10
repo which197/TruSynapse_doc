@@ -61,6 +61,17 @@ html_theme_options = {
     'collapse_navigation': False,
 }
 
+latex_engine = 'xelatex'
+latex_elements = {
+'papersize': 'a4paper',
+'pointsize': '11pt',
+'preamble': r'''
+\usepackage{xeCJK}
+\setCJKmainfont{STSong}
+\XeTeXlinebreaklocale "zh"
+\XeTeXlinebreakskip = 0pt plus 1pt
+'''
+}
 
 #html_theme = 'alabaster'
 
