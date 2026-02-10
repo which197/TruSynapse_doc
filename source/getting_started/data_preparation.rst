@@ -52,7 +52,7 @@
 ----------
 
 权重文件通常是训练好的模型参数，保存为特定格式（如 .pkl 或 .pth 文件）。
-这些文件包含了神经网络中每层的权重信息，供后续映射使用。
+这些文件包含了神经网络中每层的权重信息，供后续映射使用。可以通过加载权重文件并进行必要的转换来获取连接关系数据（connections），以适配 TruSynapse 框架的输入要求。
 
 .. code-block:: python
     :linenos:
@@ -82,12 +82,10 @@
 输入数据
 --------
 
-由于类脑芯片只支持0，1两种状态的输入，因此需要将原始输入数据（如图像、文本等）转换为二值化格式，并以一维数组的形式进行保存。
-常用的方式包括泊松编码、频率编码、时间编码等，具体方法取决于输入数据的特性和应用需求。
+由于类脑芯片只支持0，1两种状态的输入，因此需要将原始输入数据（如图像、文本等）转换为脉冲化格式，并以一维数组的形式进行保存。
+常用的方式包括率编码、时间编码等，具体方法取决于输入数据的特性和应用需求。可以使用 ``snntorch.spikegen`` 中内置的编码器将其转换为脉冲序列。
 
-我们也提供了常用的编码函数来生成二值化的 MNIST 数据集，供用户直接使用。
-
-该脚本会将 MNIST 数据集中的图像转换为二值化格式，并保存为 ``inputdata.txt``文件，方便后续加载和使用。
+下面的脚本展示了如何将 MNIST 数据集中的图像转换为二值化格式，并保存为 ``inputdata.txt``文件，方便后续加载和使用。
 
 .. code-block:: python
     :linenos:
@@ -95,24 +93,30 @@
     import numpy as np
     from torchvision import datasets, transforms
 
-    def convert_mnist_to_spike(n=100, thr=0.5, datapath='./data'):
+    mport torch
+    rom torchvision import datasets, transforms
+    mport numpy as np
+    rom snntorch import spikegen
 
-        """Convert MNIST images to binary (spike) representation.
-        :param n: int
-        数据批次大小，指定要处理的样本数量或每个输出批次中的样本数（默认：100）。
-        :param thr: float
-        脉冲转化的阈值，像素值大于该阈值将被视为脉冲（1），否则为非脉冲（0）（默认：0.5）。
+    def gen_mnist_spike(n=100, datapath='./data', filename='inputdata.txt'):
+        """
+        使用 spikegen.rate 将 MNIST 转换为脉冲并保存
+        :param n: 处理的样本数量
         """
         test = datasets.MNIST(root=datapath, train=False, download=True,
                               transform=transforms.ToTensor())
-        # 脉冲转化
-        spike = [(test[i][0].view(-1) > thr).int().numpy()
-                  for i in range(min(n, len(test)))]
 
-        inputdata = np.concatenate(spike)
-        np.savetxt('inputdata.txt', inputdata, fmt='%d')
-        return inputdata
+        data_loader = torch.utils.data.DataLoader(test, batch_size=n)
+        images, _ = next(iter(data_loader))
 
-    inputdata = convert_mnist_to_spike()
+        spike_data = spikegen.rate(images, num_steps=1) 
+
+        final_data = spike_data.view(-1).numpy().astype(int)
+
+        np.savetxt(filename, final_data, fmt='%d')
+
+        return final_data
+
+    inputdata = gen_mnist_spike(n=100)
 
 
