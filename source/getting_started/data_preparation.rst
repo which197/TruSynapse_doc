@@ -37,6 +37,7 @@
             return spk3, mem3
 
 其他框架的网络通过NIR转换后的使用示例如下：
+
 .. code-block:: python
     :linenos:
 
@@ -53,7 +54,30 @@
 权重文件通常是训练好的模型参数，保存为特定格式（如 .pkl 或 .pth 文件）。
 这些文件包含了神经网络中每层的权重信息，供后续映射使用。
 
+.. code-block:: python
+    :linenos:
 
+    connection_file = "./connection.pkl"
+    
+    def load_connection(connection_file):
+        connection_origin_value = []
+        with open(connection_file, 'rb') as pk:
+            connection_value = pickle.load(pk)
+
+        for key, value in connection_value.items():
+            if 'weight' in key:
+                connection_origin_value.append(value.T)
+
+        for i in connection_origin_value:
+            print(i.shape)
+
+        connection_input = connection_trans(connection_origin_value[0], 0, 1)
+        connection_hidden1 = connection_trans(connection_origin_value[1], 784, 1)
+        connection_output = connection_trans(connection_origin_value[2], 1296, 1)
+        connections = connection_input + connection_hidden1 + connection_output
+    return connections
+
+    load_connection(connection_file)
 
 输入数据
 --------
