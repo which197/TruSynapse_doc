@@ -197,9 +197,6 @@ timestep4时：神经元1、2、4均发放脉冲
 步骤
 ----------------
 
-1 SNN网络约束规范
-
-
 1. 实例化 NFU 子网执行体
 
 .. code-block:: python
@@ -287,6 +284,29 @@ timestep4时：神经元1、2、4均发放脉冲
 
    ANN/SNN混合神经网络示例
 
+应用场景示例
+------------
+
+1. 边缘智能监控
+    - SNN：处理事件相机（DVS）流，提供毫秒级或更低延迟的实时检测与触发，功耗极低，适合全天候运行。
+    - ANN：仅在触发时启动，进行高精度识别与行为/人脸分析，节省能耗。
+
+2. 自动驾驶与机器人感知
+    - SNN：处理激光雷达或事件相机的时序数据，快速响应紧急避障。
+    - ANN：负责交通标志识别、路径规划与场景理解，承担复杂推理任务。
+
+3. 脑机接口（BCI）
+    - SNN：实时解码神经脉冲，实现超低延迟的反馈控制。
+    - ANN：执行意图识别与高级指令映射。
+
+4. 工业质检
+    - SNN：在高速流水线上实时检测缺陷并触发剔除，延迟极低。
+    - ANN：对缺陷进行分类与严重度评估，通常离线或异步运行以保证准确性。
+
+5. 低功耗语音唤醒
+    - SNN：常时监听唤醒词，功耗极低，提供即时唤醒信号。
+    - ANN：在唤醒后开展语音识别与自然语言理解，完成复杂交互。
+
 下面给出一个简单的示例，演示如何在 Trusynapse 中搭建一个混合神经网络。
 
 1. 定义混合神经网络结构
@@ -297,22 +317,47 @@ timestep4时：神经元1、2、4均发放脉冲
     import snntorch as snn
     import torch.nn as nn
 
-    class HybridNN(nn.Module):
-        def __init__(self):
-            super(HybridNN, self).__init__()
-            self.ann = nn.Sequential(
-                nn.Linear(784, 512),
-                nn.ReLU(),
-                nn.Linear(512, 256),
-                nn.ReLU(),
-                nn.Linear(256, 10)
-            )
-            self.snn = snn.Leaky(beta=0.9, spike_grad=surrogate.fast_sigmoid())
 
-        def forward(self, x):
-            x = self.ann(x)
-            x = self.snn(x)
-            return x
+    class SNNClassifier:
+        def __init__(self):
+            # 定义SNN子网结构
+            pass
+
+        def __call__(self, spikes):
+            # 执行SNN推理，返回脉冲计数
+            return snn_output
+    
+    class HybridInspectionNet_Simplified:
+        def __init__(self):
+            # 核心模块
+            self.encoder = TemporalContrastEncoder()      # 图像 → 脉冲
+            self.snn_core = SNNClassifier()                # 脉冲 → 脉冲计数
+            self.decoder = SpikeDecoder()                  # 脉冲计数 → 缺陷/位置
+            self.analyzer = DetailedAnalyzer()             # 原始图像 → 详细分析
+            self.defect_queue = []                          # 待分析样本队列
+
+        def forward(self, image_stream):
+            for frame in image_stream:
+                # 1. 极速检测路径（总延迟 <500µs）
+                spikes = self.encoder(frame)               # CPU预处理
+                snn_out = self.snn_core(spikes)            # SNN推理（NFU）
+                has_defect, conf, bbox = self.decoder(snn_out)  # CPU后处理
+
+                # 2. 实时决策与剔除
+                if has_defect and conf > 0.7:
+                    trigger_rejection()                     # 物理剔除
+                    self.defect_queue.append((frame, bbox, conf))
+
+                # 3. 异步批量分析（离线/线程）
+                if len(self.defect_queue) >= 32:
+                    batch = self.defect_queue[:32]
+                    self.defect_queue = self.defect_queue[32:]
+                    self._analyze_batch(batch)              # 调用详细分析
+
+        def _analyze_batch(self, batch):
+            frames = [item[0] for item in batch]
+            results = self.analyzer(frames)                 # 使用ANN分析原始图像
+            save_to_database(results)
 
 2. 将 ANN 子网部署到 CPU 上执行，SNN 子网部署到 NFU 上执行
 
