@@ -120,6 +120,52 @@ API 文档
     'gnc_id' :gnc ID号
     'neuron_id' :神经元ID号
 
+(9) cluster(neuron_id_map, connections, relation=1) :
+
+.. code-block:: bash
+    :linenos:
+
+	功能：基于连接关系将神经元聚类映射到NFU的GNC中（直接映射法）
+	输入：
+	'neuron_id_map' :神经元ID映射列表
+	'connections'   :连接关系
+	'relation'      :关系值,默认为1
+	输出:
+	'input_mapping'  :输入层神经元映射结果
+	'output_mapping' :输出层神经元映射结果
+	'nfu' :NFU使用率
+	'longest_time_expression' ：网络中spike传输的最长时间
+
+(10) cluster_input2center(neuron_id_map, connections, relation=1) :
+
+.. code-block:: bash
+    :linenos:
+
+	功能 ：基于神经元的连接关系及预设的4x4网格结构，将其聚类映射至NFU的GNC
+	输入：
+	'neuron_id_map' :神经元ID映射列表
+	'connections'   :连接关系
+	'relation'      :关系值,默认为1
+	输出:
+	'input_mapping'  :输入层神经元映射结果
+	'output_mapping' :输出层神经元映射结果
+	'nfu' :NFU使用率
+	'longest_time_expression' ：网络中spike传输的最长时间
+
+(11) cluster2complex_single(neuron_id_map, connections) :
+
+.. code-block:: bash
+    :linenos:
+
+	功能 ：基于连接关系将神经元聚类映射到NFU的GNC中（模拟退火法）
+	输入：
+	neuron_id_map :神经元ID映射列表
+	connections :连接关系输出：
+	input_mapping :输入层神经元映射结果
+	output_mapping :输出层神经元映射结果
+	nfu :NFU使用率
+	longest_time_expression ：网络中spike传输的最长时间
+
 
 
 
