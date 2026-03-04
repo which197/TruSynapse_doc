@@ -1,8 +1,14 @@
+==============
+开始使用
+==============
+这里将介绍三种常见的使用场景
+
 从头搭建神经网络
 =================
 
 概述
 ----
+第一种使用场景是从头搭建一个神经网络，并将其映射到 NFU 上执行。
 本示例展示如何使用 TruSynapse 框架将一个三层前向传播全连接神经网络映射到 NFU 并启动计算。
 文档按流程分为网络构建、连接转换、输入准备、构造子网执行体与执行五个部分。
 
@@ -187,89 +193,120 @@ timestep4时：神经元1、2、4均发放脉冲
 
 该输出会保存为outputdata供用户调用，用户可根据网络用途对NFU的输出进行处理。
 
-导入已训练神经网络
-====================
+
+直接导入已有网络
+================
 概述
 ----
-对于已训练好的神经网络（例如 Deepseek、千问 等），网络结构和参数来自外部资源，需构建 NFU 子网执行体（SNNData）并调用底层驱动执行。
-下面示例按典型的步骤给出参考实现。
+对于已经运行过的神经网络，用户可以直接从文件中加载网络结构、连接关系和输入数据，并构造子网执行体进行执行。此外，这种方式也支持用户将已训练好的模型根据SNNData的输入要求进行转换后直接导入到框架中执行，省去从头搭建网络的步骤。
+下面示例展示如何加载文件中的网络数据，并构造子网执行体进行执行。
 
-步骤
+
+.. figure:: ../_static/images/workflow.png
+   :align: center
+   :width: 80%
+   :alt: 整体流程示意图
+
+.. code-block:: python
+    :linenos:
+
+    import ctypes
+    import torch.nn as nn
+    import snntorch as snn
+    from snntorch import surrogate
+    from ctypes import ( c_uint32,POINTER)
+    from net_process import net_process
+    from net_to_run import paras_process, SNNDriver
+    
+    class MnistSNN(nn.Module):
+        def __init__(self, input_neuron_num=4, hidden1=2, hidden2=2, output_neuron_num=3, beta=0.9):
+            super(MnistSNN, self).__init__()
+            self.fc1 = nn.Linear(input_neuron_num, hidden1, bias=False)
+            self.lif1 = snn.Leaky(beta=beta, spike_grad=surrogate.fast_sigmoid())
+            self.fc2 = nn.Linear(hidden1, hidden2, bias=False)
+            self.lif2 = snn.Leaky(beta=beta, spike_grad=surrogate.fast_sigmoid())
+            self.fc3 = nn.Linear(hidden2, output_neuron_num, bias=False)
+            self.lif3 = snn.Leaky(beta=beta, spike_grad=surrogate.fast_sigmoid())
+        def forward(self, x):
+            mem1 = self.lif1.init_leaky()
+            mem2 = self.lif2.init_leaky()
+            mem3 = self.lif3.init_leaky()
+    
+            spk1, mem1 = self.lif1(self.fc1(x), mem1)
+            spk2, mem2 = self.lif2(self.fc2(spk1), mem2)
+            spk3, mem3 = self.lif3(self.fc3(spk2), mem3)
+            return spk3, mem3
+    def main():
+        
+        # 生成并保存HDF5文件
+        print("1. 生成并保存HDF5文件...")
+        # 实例化网络
+        SNN_net = MnistSNN()
+    # 如果想要存入hdf5的参数，可用变量获取net_process的返回值，如 paras = net_process(...)
+    # 这里hdf5文件名经过路径校验后，会从1.hdf5变为1_0.hdf5
+    net_process(SNN_net,connection_path="./snn_data/connections.pkl",inputdata_path="./snn_data/inputspike.txt",output_file_path="./snn_data/1.hdf5")
+        
+        # 解析并转换参数
+        print("2. 从HDF5文件中解析参数...")
+        # 从HDF5文件中解析参数并构建SNNData结构体
+        hdf5paras_convert = paras_process()
+        snn_data = hdf5paras_convert.parse_collect_to_struct(spikes_in_path="./snn_data/inputspike.txt",
+    											neurondata_in_path="./snn_data/neuron.data",
+    											subnetsandparas_in_path = "./snn_data/1_0.hdf5",
+    											subnet_num = 1,
+    											subnet_paras_name = "all")
+    
+        # 执行SNN计算
+        print("3. 执行SNN计算...")
+        driver = SNNDriver(lib_path='./libsnndriver.so')
+        driver.execute(ctypes.byref(snn_data))
+        
+        # 处理输出结果
+        print("4. 处理输出结果...")
+        if snn_data.output_data and snn_data.output_len > 0:
+            # 将C数组转换为Python列表
+            output_array = ctypes.cast(snn_data.output_data, 
+                                     POINTER(c_uint32 * snn_data.output_len))
+            output_results = [output_array.contents[i] for i in range(snn_data.output_len)]
+            
+            print(f"   输出脉冲: {len(output_results)} 个")
+            print(f"   全部输出: {output_results}")
+            print(f"   前10个输出: {output_results[:10]}")
+            
+            # 释放C库分配的内存
+            driver.free_output(ctypes.byref(snn_data))
+            print("   输出内存已释放")
+        else:
+            print("   警告: 未获得输出结果")
+        
+        print("=== SNN计算完成 ===")
+    
+    if __name__ == "__main__":
+        main()    
+
+
+以上演示了一个完整的脉冲神经网络（SNN）处理流程，主要包含以下四个步骤：
+1. 网络定义与参数生成
+-------------------
+    #. 定义一个三层前馈SNN网络（MnistSNN），包含两个全连接层和LIF神经元；
+    #. 调用net_process()函数，将网络结构、连接权重和输入数据转换为HDF5格式的参数文件。
+
+2. 参数解析与数据结构构建
+-----------------------
+    #. 使用paras_process类从HDF5文件中读取网络参数；
+    #. 调用parse_collect_to_struct()将参数转换为C语言兼容的SNNData结构体。
+
+3. SNN计算执行
 ----------------
+    #. 创建SNNDriver实例，加载底层SNN驱动库（libsnndriver.so）；
+    #. 调用execute()执行SNN推理计算。
 
-1. 实例化 NFU 子网执行体
+4. 结果处理与清理
+----------------
+    #. 获取输出脉冲序列，将C数组转换为Python列表；
+    #. 显示统计信息（输出数量、前10个结果等）；
+    #. 调用free_output()释放底层分配的内存。
 
-.. code-block:: python
-    :linenos:
-
-    # 实例化一个 SNNData 子网执行体
-    snn_data = SNNData()
-
-2. 填充子网执行体各字段（示例）
-
-.. code-block:: python
-    :linenos:
-
-    # 填充 27 个配置参数
-    snn_data.params = (ctypes.c_uint64 * 27)(*[ctypes.c_uint64(x) for x in params])
-
-    # 填充 connection_data
-    snn_data.connection_data = (ctypes.c_uint64 * len(connection_data))(
-        *[ctypes.c_uint64(x) for x in connection_data]
-    )
-    snn_data.connection_len = len(connection_data)
-
-    # 填充 inputneuronlist_data
-    snn_data.inputneuronlist_data = (ctypes.c_uint32 * len(inputneuronlist_data))(
-        *[ctypes.c_uint32(x) for x in inputneuronlist_data]
-    )
-    snn_data.inputneuronlist_len = len(inputneuronlist_data)
-
-    # 填充 inputspike_data
-    snn_data.inputspike_data = (ctypes.c_uint32 * len(inputspike_data))(
-        *[ctypes.c_uint32(x) for x in inputspike_data]
-    )
-    snn_data.inputspike_len = len(inputspike_data)
-
-    # 填充 neuronbase_data
-    snn_data.neuronbase_data = (ctypes.c_uint32 * len(neuronbase_data))(
-        *[ctypes.c_uint32(x) for x in neuronbase_data]
-    )
-    snn_data.neuronbase_len = len(neuronbase_data)
-
-    # 填充 neuron_data
-    snn_data.neuron_data = (ctypes.c_uint32 * len(neuron_data))(
-        *[ctypes.c_uint32(x) for x in neuron_data]
-    )
-    snn_data.neuron_data_len = len(neuron_data)
-
-    # 初始化输出字段
-    snn_data.output_data = None
-    snn_data.output_len = 0
-
-3. 执行子网
-
-.. code-block:: python
-    :linenos:
-
-    driver = SNNDriver()
-    driver.execute(ctypes.byref(snn_data))
-
-4. 处理子网输出
-
-.. code-block:: python
-    :linenos:
-
-    if snn_data.output_data and snn_data.output_len > 0:
-        output_array = ctypes.cast(snn_data.output_data, POINTER(c_uint32 * snn_data.output_len))
-        output_results = [output_array.contents[i] for i in range(snn_data.output_len)]
-
-5. 回收子网执行体资源
-
-.. code-block:: python
-    :linenos:
-
-    driver.free_output(ctypes.byref(snn_data))
 
 
 搭建混合神经网络
