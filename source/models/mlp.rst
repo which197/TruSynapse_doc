@@ -67,28 +67,14 @@
             return spk3, mem3
 
     net = MnistSNN(input_neuron_num=784, hidden1=512, hidden2=256, output_neuron_num=10, beta=0.9)
-    
-    connection_file = "/your/path/to/connection.pkl"
 
-    connection_origin_value = []
+    connections1 = linear_connection_trans(weight_matrix, input_size, input_neuron_ids, output_neuron_ids)
 
-    with open(connection_file, 'rb') as pk:
+    connections2 = linear_connection_trans(weight_matrix, input_size, input_neuron_ids, output_neuron_ids)
 
-        connection_value = pickle.load(pk)
+    connections3 = linear_connection_trans(weight_matrix, input_size, input_neuron_ids, output_neuron_ids)
 
-    for key, value in connection_value.items():
-
-        if 'weight' in key:
-
-            connection_origin_value.append(value.T)
-
-    connection_input = connection_trans(connection_origin_value[0], 0, 1)
-
-    connection_hidden1 = connection_trans(connection_origin_value[1], 784, 1)
-
-    connection_output = connection_trans(connection_origin_value[2], 1296, 1)
-
-    connections = connection_input + connection_hidden1 + connection_output
+    connections = connections1 + connections2 + connections3
     
     with open("/your/path/to/inputdata.txt") as file:
 
