@@ -30,7 +30,7 @@ source/
 
 文档发布在 GitHub Pages 上：
 
-**https://which197.github.io/TruSynapse_doc/**
+**https://gdiist.github.io/TruSynapse_doc/**
 
 ## 本地构建
 
