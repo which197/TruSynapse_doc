@@ -1,3 +1,12 @@
+
+/* ------------------------------代码块部分自动换行（会侵入行号）------------------------- */
+/* 针对添加了 wrap-code 类的代码块，强制自动换行 */
+.wrap-code pre {
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+    overflow-x: auto;
+}
+
 /* ------------------------------表格顶端对齐------------------------- */
 /* 应用于自定义的 top-align-table 类 */
 .top-align-table td {

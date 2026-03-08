@@ -18,13 +18,14 @@
       -	| pickle生成的二进制文件
         | (也支持Pytorch的.pth文件)
       - 用户的SNN网络训练权重文件
-    * - inputdata.txt
+    * - inputspike.txt
       - 文本文件
       - 输入脉冲数据
     * - neuron.data
       - 数据文件
       - 神经元模型参数数据
 
+.. _label_InputFilesIntro:
 
 * 如果直接导入已有网络，则需要准备以下文件：
 
@@ -44,7 +45,7 @@
     * - ./snn_data/neuron.data
       - 数据文件
       - 神经元模型参数数据
-    * - ./snn_data/1_0.hdf5
+    * - ./snn_data/subnet_data_0.hdf5
       - HDF5文件
       - 处理后的SNN网络参数
 
@@ -167,7 +168,23 @@
 
 
 
-HDF5文件
---------
+自有格式HDF5文件
+------------------
 
+.. list-table::
+    :align: center
+
+    * - 文件名
+      - 类型
+      - 内容
+    * - net
+      - python对象
+      - 神经网络结构
+    * - connection.pkl
+      -	| pickle生成的二进制文件
+        | (也支持Pytorch的.pth文件)
+      - 用户的SNN网络训练权重文件
+    * - inputspike.txt
+      - 文本文件
+      - 输入脉冲数据
 
