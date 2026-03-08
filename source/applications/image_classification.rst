@@ -133,8 +133,6 @@ NFU推理过程详细输出：
     ---------|----------|-----------|-----|--------|----------
     28917630 | 00080617 |     4     |  0  |  1559  | Data
 
-
-
 **推理结果分析：**
 
 - **神经元映射**: 输出层神经元1552-1561对应数字0-9，都映射到GNC=0
@@ -142,7 +140,7 @@ NFU推理过程详细输出：
 - **分类结果**: 1559号神经元对应数字7
 
 
-实现方案二 ：mnist-sparse
+实现方案二 ：mnist-sparse 
 -------------------------
 
 - `mnist-sparse` 采用稀疏训练策略，参考文献：`Rigging the Lottery: Making All Tickets Winners <https://ojs.aaai.org/index.php/AAAI/article/view/25079>`_。
@@ -255,19 +253,22 @@ NFU推理过程详细输出：
 ^^^^^^^^^^^^^^^^^^
 
 NFU推理过程详细输出：
-待补充..
 
-.. .. code-block:: text
+.. code-block:: text
 
-..     输出层神经元到GNC的映射:
-..     {10192: 1, 10193: 1, 10194: 1, 10195: 1, 10196: 1, 10197: 1, 10198: 1, 10199: 1, 10200: 1, 10201: 1}
+   输出层神经元到GNC的映射:
+    ['1_2000', '1_2001', '1_2002', '1_2003', '1_2004', '1_2005', '1_2006', '1_2007', '1_2008', '1_2009']
 
-..     Time(ns) | Raw_Hex  | Timestamp | GNC | Neuron | Note
-..     ---------|----------|-----------|-----|--------|----------
-..     11905390 | 0002c017 |     1     |  6  |   23   | Data
-..     25396850 | 0004c017 |     2     |  6  |   23   | Data  
-..     25396890 | 0004c012 |     2     |  6  |   18   | Data
-..     31632410 | 0006c012 |     3     |  6  |   18   | Data
+    Time(ns) | Raw_Hex  | Timestamp | GNC | Neuron | Note
+    ---------|----------|-----------|-----|--------|----------
+    9151970  | 000627d7 |     3     |  1  |  2007  | Data
+
+
+**推理结果分析（卷积网络）：**
+
+- **神经元激活**: 检测到GNC=1的2007号神经元产生输出脉冲
+- **分类结果**: 2007号神经元对应数字7
+
 
 
 实现方案四 ：cifar10-conv
@@ -291,12 +292,15 @@ NFU推理过程详细输出：
     # CIFAR-10类别标签
     CIFAR10_CLASSES = ['plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
 
-    # 1. 加载CIFAR-10数据集并随机选择10张图片
+    # 创建result目录
+    os.makedirs('result', exist_ok=True)
+
+    # 1. 加载CIFAR-10数据集并随机选择1张图片
     transform = transforms.ToTensor()
     dataset = datasets.CIFAR10(root='../data/CIFAR10', train=True, download=True, transform=transform)
     
     random.seed(42)
-    indices = random.sample(range(len(dataset)), 10)
+    indices = random.sample(range(len(dataset)), 1)
     images = []
     labels = []
     
@@ -305,61 +309,85 @@ NFU推理过程详细输出：
         images.append(image)
         labels.append(label)
 
-    # 2. 创建2x5的网格显示图片
-    fig, axes = plt.subplots(2, 5, figsize=(15, 6))
-    axes = axes.flatten()
+    # 2. 创建单张图片显示
+    fig, ax = plt.subplots(1, 1, figsize=(6, 6))
 
-    for i in range(10):
-        axes[i].imshow(images[i].permute(1, 2, 0))
-        axes[i].set_title(f'Pos {i}: {CIFAR10_CLASSES[labels[i]]}\n(Label: {labels[i]})')
-        axes[i].axis('off')
+    # 显示图片
+    ax.imshow(images[0].permute(1, 2, 0))
+    ax.set_title(f'CIFAR-10 Sample: {CIFAR10_CLASSES[labels[0]]}\n(Label: {labels[0]})', fontsize=14)
+    ax.axis('off')
 
     plt.tight_layout()
-    plt.savefig('result/cifar10_random_10_images.png', dpi=300, bbox_inches='tight')
+    plt.savefig('result/cifar10_single_image.png', dpi=300, bbox_inches='tight')
     plt.show()
 
     print(f"加载了{len(images)}张图像，标签为: {labels}")
 
-执行上述代码后，将显示如下CIFAR-10图像网格：
+执行上述代码后，将显示如下单张CIFAR-10图像：
 
-.. image:: ../_static/images/summary_all_images.png
-   :width: 800px
+.. image:: ../_static/images/summary_dog_image.png
+   :width: 400px
    :align: center
-   :alt: CIFAR-10样本演示
+   :alt: CIFAR-10单张样本演示
 
 2. 转换为二进制脉冲向量：
 
 .. code-block:: python
     :linenos:
 
-    # 3. 泊松编码转换为二进制脉冲向量
-    binary_vectors = []
-    np.random.seed(42)
-    
-    for i, image in enumerate(images):
-        # 将图像展平为1维 (3072维: 3×32×32)  
-        flat_image = image.flatten().numpy()
-        # 使用泊松过程生成二进制向量
-        binary_vector = (np.random.random(len(flat_image)) < flat_image).astype(int)
-        binary_vectors.append(binary_vector)
+    # 泊松编码转换为二进制脉冲向量
+    def poisson_encoding(images, threshold=0.5, time_steps=1, seed=42):
+        """
+        将图像转换为二进制脉冲向量 (类似MNIST binary flat格式)
+        
+        Args:
+            images: 图像列表
+            threshold: 二值化阈值
+            time_steps: 时间步数 (设为1生成二进制flat格式)
+            seed: 随机种子
+        
+        Returns:
+            binary_vectors: 二进制向量列表
+        """
+        np.random.seed(seed)
+        all_binary_vectors = []
+        
+        for i, image in enumerate(images):
+            # 将图像展平为1维 (3072维: 3×32×32)
+            flat_image = image.flatten().numpy()
+            
+            # 使用泊松过程生成二进制向量
+            # 像素值作为发放概率
+            binary_vector = (np.random.random(len(flat_image)) < flat_image).astype(int)
+            
+            all_binary_vectors.append(binary_vector)
+            print(f"图片 ({CIFAR10_CLASSES[labels[i]]}): {len(binary_vector)}维, {binary_vector.sum()}个脉冲")
+        
+        return all_binary_vectors
 
-    # 4. 保存为binary flat格式
-    output_file = '../test_data/cifar10_10_binary_flat.txt'
+    # 生成二进制脉冲向量
+    print("\n=== 生成CIFAR-10单张图片二进制脉冲向量 ===")
+    binary_vectors = poisson_encoding(images, threshold=0.5, time_steps=1)
+
+    # 保存为binary flat格式 (每行一个值)
+    output_file = '../test_data/cifar10_single_binary_flat.txt'
     os.makedirs('../test_data', exist_ok=True)
 
     with open(output_file, 'w') as f:
-        for i, binary_vector in enumerate(binary_vectors):
-            binary_str = ' '.join(map(str, binary_vector))
-            f.write(f"# Image {i}: Label {labels[i]} ({CIFAR10_CLASSES[labels[i]]})\n")
-            f.write(binary_str + '\n')
+        binary_vector = binary_vectors[0]
+        # 每行一个值，不包含注释行
+        for value in binary_vector:
+            f.write(f'{value}\n')
 
-    print(f"10张CIFAR-10图像的脉冲向量已保存到: {output_file}")
+    print(f"单张CIFAR-10图像的脉冲向量已保存到: {output_file}")
 
 执行输出结果：
 
 .. code-block:: text
    
-    10张CIFAR-10图像的脉冲向量已保存到: ../test_data/cifar10_10_binary_flat.txt
+    === 生成CIFAR-10单张图片二进制脉冲向量 ===
+    图片 (frog): 3072维, 893个脉冲
+    单张CIFAR-10图像的脉冲向量已保存到: ../test_data/cifar10_single_binary_flat.txt
 
 网络结构定义
 ^^^^^^^^^^^^
@@ -402,4 +430,20 @@ NFU推理过程详细输出：
 ^^^^^^^^^^^^^^^^^^
 
 NFU推理过程详细输出：
-待补充..
+
+.. code-block:: text
+
+    输出层神经元到GNC的映射:
+    {6656: 0, 6657: 0, 6658: 0, 6659: 0, 6660: 0, 6661: 0, 6662: 0, 6663: 0, 6664: 0, 6665: 0}
+
+    Time(ns) | Raw_Hex  | Timestamp | GNC | Neuron | Note
+    ---------|----------|-----------|-----|--------|----------
+    7598810  | 000a1a05 |     5     |  0  |  6661  | Data
+
+
+
+**推理结果分析（CIFAR-10卷积网络）：**
+
+- **神经元映射**: 输出层神经元6656-6665对应CIFAR-10类别0-9
+- **神经元激活**: 检测到GNC=0的6661号神经元产生输出脉冲
+- **分类结果**: 6661号神经元对应类别 **dog**
