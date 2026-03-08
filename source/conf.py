@@ -38,6 +38,8 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx_copybutton',        # 复制按钮
     'sphinx_togglebutton',      # 折叠按钮
+    'sphinx.ext.autosummary',
+    'sphinx.ext.mathjax',
 ]
 
 
