@@ -171,6 +171,77 @@
 四、神经元模型 (neuron.data)
 -----------------------------
 
+神经元模型文件 ``neuron.data`` 是 NFU 执行神经元计算所需的程序指令。该文件由汇编指令转换生成，定义了神经元的更新逻辑、事件处理和脉冲生成等行为。
+本框架中默认提供了 LIF 神经元模型的机器码，用户也可以根据需要自定义神经元模型并生成对应的 ``neuron.data`` 文件。具体可参考 :ref:`高级指南中的神经元模型定义 <neuron_model_definition>` 和文件生成流程部分。
+
+
+以下是系统默认的神经元模型汇编指令 ``neuron.txt`` 示例：
+
+.. code-block:: text
+   :linenos:
+
+    LUI a11 0
+    ST a11 a0 1
+    FLD fa1 a0 1        //v_reset
+    LUI a11 16256
+    ST a11 a0 2
+    FLD fa2 a0 2        //v_th
+    LUI a1 16
+    LUI a2 16
+    LUI a3 0            //spike 
+    LUI a4 1            //local timestep
+    LUI a5 3            //global timestep
+    LUI a11 16248
+    ST a11 a0 3
+    FLD fa3 a0 3        //decay
+    BRE a1 a2
+    LUI a0 0
+    BEQ 24 a16 a3       //only spike
+    BEQ 26 a16 a4       //local timestep
+    BEQ 21 a16 a5       //global timestep
+    FMUL fa27 fa17 fa3  //Decay
+    BRE a1 a2
+    ADDI a26 a0 0       //global timestep generate spike
+    FADD fa27 fa1 fa0   //eventcompl
+    BRE a1 a2
+    FADD fa27 fa16 fa17 //only spike事件处理 v=v+w&&eventcompl
+    BRE a1 a2           
+    FADD fa6 fa16 fa17  //local timestep
+    FLT 32 fa6 fa2      
+    ADDI a16 a3 0       //spike
+    ADDI a26 a0 0       //generate spike
+    FADD fa27 fa1 fa0   //v=v_reset&&eventcompl
+    BRE a1 a2
+    FADD fa27 fa6 fa0   //v=v+w&&eventcompl
+    BRE a1 a2
+    LUI a0 0
+    LUI a0 0
+    LUI a0 0
+    LUI a0 0
+
+
+可以通过调用 API 将汇编指令转换为 ``neuron.data`` 二进制机器码文件：
+
+.. code-block:: python
+    :linenos:
+
+    from asm2bin import assemble_file
+
+    # 方式1: 从文件转换
+    assemble_file("neuron.txt", "neuron.data")
+
+    # 方式2: 从字符串转换
+    from asm2bin import assemble_str
+    asm_code = """
+    LUI a11 0
+    ST a11 a0 1
+    FLD fa1 a0 1
+    """
+    machine_codes = assemble_str(asm_code)
+
+相关 API 参考：:ref:`api_assemble_file`、:ref:`api_assemble_str`、:ref:`api_parse_instruction`
+
+
 
 
 五、自有格式HDF5 (subnet_data.hdf5)
