@@ -172,7 +172,7 @@
 -----------------------------
 
 神经元模型文件 ``neuron.data`` 是 NFU 执行神经元计算所需的程序指令。该文件由汇编指令转换生成，定义了神经元的更新逻辑、事件处理和脉冲生成等行为。
-本框架中默认提供了 LIF 神经元模型的机器码，用户也可以根据需要自定义神经元模型并生成对应的 ``neuron.data`` 文件。具体可参考 :ref:`高级指南中的神经元模型定义 <neuron_model_definition>` 和文件生成流程部分。
+本框架中默认提供了 LIF 神经元模型的机器码，用户也可以根据需要自定义神经元模型并生成对应的 ``neuron.data`` 文件。具体可参考 :ref:`高级使用中的神经元模型定义 <neuron_model_definition>` 和文件生成流程部分。
 
 
 以下是系统默认的神经元模型汇编指令 ``neuron.txt`` 示例：
@@ -227,19 +227,10 @@
 
     from asm2bin import assemble_file
 
-    # 方式1: 从文件转换
+    #文件转换
     assemble_file("neuron.txt", "neuron.data")
 
-    # 方式2: 从字符串转换
-    from asm2bin import assemble_str
-    asm_code = """
-    LUI a11 0
-    ST a11 a0 1
-    FLD fa1 a0 1
-    """
-    machine_codes = assemble_str(asm_code)
-
-相关 API 参考：:ref:`api_assemble_file`、:ref:`api_assemble_str`、:ref:`api_parse_instruction`
+相关 API 参考：:ref:`assemble_file <api_assemble_file>`
 
 
 
