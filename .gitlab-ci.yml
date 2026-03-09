@@ -1,0 +1,16 @@
+# GitLab Pages deployment for Sphinx documentation
+image: python:3.10
+
+stages:
+  - deploy
+
+pages:
+  stage: deploy
+  script:
+    - pip install -r requirements.txt
+    - sphinx-build -b html source public
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
