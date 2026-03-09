@@ -495,7 +495,89 @@ API 文档
     输入:
     'data': 实例化对象，具体为实例化的SNNdata类，其output_data字段指向需要释放的内存；
 
-五、工具API
+五、神经元模型 API
+-------------------
+
+本节提供神经元模型汇编器相关 API，用于将 BCE 指令集汇编代码转换为 NFU 可执行的 32 位机器码。
+
+.. _api_assemble_file:
+
+(1) **assemble_file** 汇编文件转换
+
+.. code-block:: bash
+    :class: wrap-code
+
+    assemble_file(input_file: str, output_file: str) -> int :
+
+    功能:将汇编文件转换为机器码文件
+    输入:
+    'input_file' :输入汇编文件路径（如 neuron.txt）
+    'output_file' :输出机器码文件路径（如 neuron.data）
+    输出:
+    生成的机器码行数
+
+.. _api_assemble_str:
+
+(2) **assemble_str** 汇编字符串转换
+
+.. code-block:: bash
+    :class: wrap-code
+
+    assemble_str(assembly_code: str) -> List[str] :
+
+    功能:将汇编代码字符串转换为机器码列表
+    输入:
+    'assembly_code' :汇编代码字符串，每行一条指令
+    输出:
+    32 位机器码字符串列表
+
+.. _api_parse_instruction:
+
+(3) **parse_instruction** 单条指令解析
+
+.. code-block:: bash
+    :class: wrap-code
+
+    parse_instruction(instruction: str) -> Optional[str] :
+
+    功能:解析单条汇编指令，生成 32 位机器码
+    输入:
+    'instruction' :汇编指令字符串
+    输出:
+    32 位二进制机器码字符串，解析失败返回 None
+
+(4) **AssemblerError** 汇编器异常类
+
+.. code-block:: bash
+    :class: wrap-code
+
+    class AssemblerError(Exception) :
+
+    功能:汇编器错误异常，当指令解析失败时抛出
+
+(5) **get_supported_instructions** 获取支持的指令
+
+.. code-block:: bash
+    :class: wrap-code
+
+    get_supported_instructions() -> List[str] :
+
+    功能:获取汇编器支持的所有指令列表
+    输出:
+    支持的操作码列表（如 LUI, BEQ, FLD, FADD 等）
+
+(6) **get_supported_registers** 获取支持的寄存器
+
+.. code-block:: bash
+    :class: wrap-code
+
+    get_supported_registers() -> List[str] :
+
+    功能:获取汇编器支持的所有寄存器列表
+    输出:
+    支持的寄存器名称列表（如 a0-a31, fa0-fa31）
+
+六、工具API
 -------------------
 
 (1) **conv_connections_trans** 卷积层连接矩阵转换三元组
