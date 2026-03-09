@@ -318,10 +318,10 @@ NFU 直接输出结果以 32 位无符号整数表示，各字段含义如下：
 
     from net_to_run import paras_process
     def main():
-        
-        # 从文件中解析参数并执行计算
+
+        # 实例化参数处理类
         process = paras_process()
-        # 获取计算结果
+        # 从文件中解析参数并执行计算，获取计算结果
         source_results = process.execute_computing(spikes_in_path="./snn_data/inputspike.txt",
                                                 neurondata_in_path="./snn_data/neuron.data",
                                                 subnetsandparas_in_path = "./snn_data/subnet_data.hdf5",
@@ -334,6 +334,10 @@ NFU 直接输出结果以 32 位无符号整数表示，各字段含义如下：
 
 三、搭建混合神经网络
 ======================
+
+概述
+--------
+
 作为一款类脑CPU的框架，TruSynapse 除了支持常规的脉冲神经网络外，还能支持ANN/SNN混合神经网络。
 用户可以将部分子网部署在 NFU 上执行，而其他子网继续在 CPU 上运行，从而实现性能与灵活性的平衡。
 
@@ -345,7 +349,7 @@ NFU 直接输出结果以 32 位无符号整数表示，各字段含义如下：
    ANN/SNN混合神经网络示例
 
 应用场景示例
-------------
+----------------
 
 1. 边缘智能监控
     - SNN：处理事件相机（DVS）流，提供毫秒级或更低延迟的实时检测与触发，功耗极低，适合全天候运行。
