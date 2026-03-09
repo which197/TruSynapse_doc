@@ -1,3 +1,5 @@
+.. _neuron_model_definition:
+
 神经元模型
 ==========
 
