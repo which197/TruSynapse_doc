@@ -9,7 +9,7 @@ API 文档
 (1) **assign_neuron_ids_1d** 一维网络神经元分配ID
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     assign_neuron_ids_1d(net,input_size) :
 
@@ -24,7 +24,7 @@ API 文档
 (2) **assign_neuron_ids_2d** 二维网络神经元分配ID
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     assign_neuron_ids_2d(net,input_size) :
 
@@ -40,7 +40,7 @@ API 文档
 (3) **assign_neuron_ids_3d** 三维网络神经元分配ID
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     assign_neuron_ids_3d(net,input_size) :
     
@@ -55,7 +55,7 @@ API 文档
 (4) **assign_select** 按尺寸选择ID分配函数
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     assign_select(net,input_size) :
 
@@ -68,7 +68,7 @@ API 文档
 (5) **build_connections** 构建神经元的连接关系
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     build_connections(net,neuron_id_map,input_size) :
 
@@ -83,7 +83,7 @@ API 文档
 (6) **check_save_eq** 校验加载同名文件一致性
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     check_save_eq(save_file_name, net, sample_input_size) :
 
@@ -99,7 +99,7 @@ API 文档
 (7) **class GNC** GNC类
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     class GNC(gnc_id,neuron_id) :
 
@@ -111,7 +111,7 @@ API 文档
 (8) **cluster** 基于连接关系聚类映射神经元-方式一
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     cluster(neuron_id_map, connections, relation=1) 
 
@@ -129,7 +129,7 @@ API 文档
 (9) **cluster_input2center** 基于连接关系聚类映射神经元-方式二
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     cluster_input2center(neuron_id_map, connections, relation=1) :
 
@@ -147,7 +147,7 @@ API 文档
 (10) **cluster2complex_single** 基于连接关系聚类映射神经元-方式三
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     cluster2complex_single(neuron_id_map, connections) :
 
@@ -164,7 +164,7 @@ API 文档
 (11) **ComplexSNN** 构建脉冲神经网络
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     ComplexSNN(input_neu,hidden_neu,output_neu) :
 
@@ -179,7 +179,7 @@ API 文档
 (12) **get_model_input_size** 获取模型输入尺寸
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     get_model_input_size(net,sample_input) :
 
@@ -193,7 +193,7 @@ API 文档
 (13) **get_net_info** 获取网络参数
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     get_net_info(net) :
 
@@ -209,7 +209,7 @@ API 文档
 (14) **output_transfer** 输出数据转换保存
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     output_transfer(neuron_id_map,nfu,connections) :
 
@@ -227,7 +227,7 @@ API 文档
 (1) **address** 预分配数据存储空间 :
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     address(length,output_layer_length,input_layer_length,BATCH_SIZE,BATCH) :
 
@@ -244,7 +244,7 @@ API 文档
 (2) **address_list_init** 数据列表初始化
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     address_list_init(address_data_list) :
 
@@ -257,7 +257,7 @@ API 文档
 (3) **check_64bit_align** 检查64位对齐
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     check_64bit_align(mem_file_content,address_data_list) :
 
@@ -271,7 +271,7 @@ API 文档
 (4) **connection_data_load** 连接关系数据加载
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     connection_data_load(connection_list,data_list) :
 
@@ -285,7 +285,7 @@ API 文档
 (5) **input_data_load** 输入数据加载
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     input_data_load(inputdata,data_list,inputspike_address) :
 
@@ -300,7 +300,7 @@ API 文档
 (6) **sibilis_count** 兄弟节点数计算
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     sibilis_count(list) :
 
@@ -313,7 +313,7 @@ API 文档
 (7) **outputnel_data_load** 输出神经元映射信息加载
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     outputnel_data_load(output_layer_value,data_list) :
 
@@ -329,7 +329,7 @@ API 文档
 (1) **framework** 调用本框架进行数据准备
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     framework(net,connections,inputdata):
 
@@ -344,7 +344,7 @@ API 文档
 (2) **run** 启动NFU进行连接计算
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     run(data) :
 
@@ -356,10 +356,13 @@ API 文档
 
 HDF5接口及驱动API
 -------------------
+
+.. _label_net_process:
+
 (1) **net_process** 网络处理
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     net_process(net,connection_path,inputdata_path,output_file_path) :
 
@@ -372,10 +375,12 @@ HDF5接口及驱动API
     输出:
     'paras':  字典，包含存入HDF5文件里的所有参数，参数存入HDF5后，可不用再次读取HDF5直接使用该参数继续后续流程。
 
+.. _label_parasprocess_Mfuncs:
+
 (2) **convert_paras** 将参数存入HDF5
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     convert_paras(self, netparas: dict, path: str, save_file:bool = False ):
     属于paras_process类
@@ -390,7 +395,7 @@ HDF5接口及驱动API
 (3) **load_file** 从HDF5加载参数
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     @classmethod
     load_file(cls, path: str, net_num:int = -1, paras_name:str = "all" ):
@@ -407,7 +412,7 @@ HDF5接口及驱动API
 (4) **parse_collect_to_struct** 提取参数并构建结构体
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     parse_collect_to_struct(self,
                            spikes_in_path: str,
@@ -427,10 +432,12 @@ HDF5接口及驱动API
     输出:
     'SNNData': 实例化对象，为ctypes结构体，该ctypes结构体实现 Python 与 C 语言的内存数据互通，确保 Python 侧构造的SNNData实例，其内存布局及字段类型与 C 端 NFU 驱动中定义的SNNData结构体完全对齐，支持 Python 侧参数直接传递至 C 语言函数调用。
 
+.. _label_execute_computing:
+
 (5) **execute_computing** 使用输入的数据执行计算
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     execute_computing(self,
                     spikes_in_path: str,
@@ -448,10 +455,12 @@ HDF5接口及驱动API
     输出:
     'output_results': 列表，为NFU计算完的原始结果，需要处理，注意，输出脉冲列表中的首个“1”表示存在输出，此为标志位，并非实际的输出脉冲，实际输出脉冲应从列表第二个元素开始计算。
 
+.. _label_SNNDriver_Mfuncs:
+
 (6) **get_last_error** 获取上次的错误信息
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     get_last_error(self):
     属于SNNDriver类
@@ -463,7 +472,7 @@ HDF5接口及驱动API
 (7) **execute** 使用输入数据执行计算
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     execute(self, data):
     属于SNNDriver类
@@ -477,7 +486,7 @@ HDF5接口及驱动API
 (8) **free_output** 释放内存
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     free_output(self, data):
     属于SNNDriver类
@@ -492,7 +501,7 @@ HDF5接口及驱动API
 (1) **conv_connections_trans** 卷积层连接矩阵转换三元组
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     conv_connections_trans(weight_matrix, input_size, input_neuron_ids, output_neuron_ids,stride=(1, 1), padding=(0, 0), dilation=(1, 1)):
 
@@ -511,7 +520,7 @@ HDF5接口及驱动API
 (2) **linear_connections_trans** 全连接层连接矩阵转换三元组
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     linear_connections_trans(weight_matrix, input_size, input_neuron_ids, output_neuron_ids):
 
@@ -524,10 +533,12 @@ HDF5接口及驱动API
     输出:
     'connections' :描述连接关系的三元组
 
+.. _label_path_process:
+
 (3) **check_and_create_path** 路径处理
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     check_and_create_path(path: Optional[str], mode: str = 'check') :
     属于paras_process类
@@ -535,14 +546,14 @@ HDF5接口及驱动API
     功能:接收路径参数，并使用校验/创建模式处理路径（只支持HDF5/JSON的文件后缀）。
     输入:
     'path': 字符串，输入路径；
-    'mode': 字符串，模式，分别为“check”和“create”两种模式，“check”模式为校验模式，“create”为创建模式，校验模式下，仅对包含文件名的目标路径执行合法性校验，校验不通过时抛出异常；创建模式下，优先尝试创建用户指定的自定义路径（含文件名），若创建操作失败，则降级创建默认路径。
+    'mode': 字符串，模式，分别为“check”和“create”两种模式，“check”模式为校验模式，“create”为创建模式，该函数标准化路径后，校验模式验证含文件名的路径合法性并返回扩展名，不通过则抛异常；创建模式优先创建自定义路径，失败则降级用默认路径，同时为避免覆盖文件，文件名从 0 开始递增序号生成唯一文件路径，自动处理异常并返回有效结果
     输出:
     'ext_name|new_file_path':  字符串，校验模式返回文件扩展名，创建模式返回使用的路径。
 
 (4) **_nested_depth** 计算嵌套层数
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     _nested_depth(obj) :
     属于paras_process类
@@ -556,7 +567,7 @@ HDF5接口及驱动API
 (5) **read_decorhex_file** 读取十进制或十六进制文件
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     read_decorhex_file(self,filename) :
     属于paras_process类
@@ -570,7 +581,7 @@ HDF5接口及驱动API
 (6) **read_binary_file** 读取二进制文件
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     read_binary_file(self,filename) :
     属于paras_process类

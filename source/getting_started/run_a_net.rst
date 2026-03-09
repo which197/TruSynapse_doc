@@ -218,37 +218,17 @@ NFU 直接输出结果以 32 位无符号整数表示，各字段含义如下：
 二、直接导入已有网络
 =====================
 概述
-----
-对于已经训练好的神经网络，用户可以直接从多个文件中加载参数构造子网执行体，并调用NFU驱动进行执行。此方法无需网络处理步骤。
+------
+对于已经处理好，且参数保存至HDF5文件中的神经网络，用户可以直接从多个文件中加载参数构造子网执行体，并调用NFU驱动进行执行。此方法无需网络处理步骤。
 
-文件说明
-----------
-需要加载的文件说明如下:
-
-.. list-table::
-    :align: center
-
-    * - 示例文件路径
-      - 类型
-      - 内容
-    * - ./snn_data/inputspike.txt
-      - 文本文件
-      - 输入脉冲数据
-    * - ./snn_data/connections.pkl
-      -	| pickle生成的二进制文件
-        | (也支持Pytorch的.pth文件)
-      - 用户的SNN网络结构参数
-    * - ./snn_data/neuron.data
-      - 数据文件
-      - 神经元模型参数数据
-    * - ./snn_data/1_0.hdf5
-      - HDF5文件
-      - 处理后的SNN网络参数
+1. 文件说明
+--------------
+需加载的文件说明，请参考 :ref:`数据准备(点击跳转)<label_InputFilesIntro>` 中的表格。
 
 其中，HDF5的文件来源有两种，一种是调用本框架的 ``net_process`` 模块生成自有格式的HDF5文件；第二种是外源的HDF5文件经过工具函数转换后得到（待实现）。
 
-示例流程
----------
+2. 示例流程
+-------------
 下面的流程图将展示如何调用 ``net_process`` 模块生成自有格式的HDF5文件，随后再加载该HDF5文件中的数据，并构造子网执行体进行计算。
 
 .. figure:: ../_static/images/workflow.png
@@ -256,16 +236,23 @@ NFU 直接输出结果以 32 位无符号整数表示，各字段含义如下：
    :width: 80%
    :alt: 整体流程示意图
 
-示例代码
----------
+3. 示例代码
+-------------
 
-保存参数至自有格式的HDF5文件
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+(1) 保存参数至自有格式的HDF5文件
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 下面演示了一个完整的脉冲神经网络（SNN）处理流程，此流程会从文件中提取参数并进行处理，随后存至自有格式的HDF5文件中，主要包含以下两个步骤：
 
 1. 定义一个三层前馈SNN网络（MnistSNN），包含两个全连接层和LIF神经元；
 2. 用net_process()函数，将网络结构、连接权重和输入数据转换为HDF5格式的参数文件。
+
+**参考**
+
+函数说明（点击跳转）：
+ - :ref:`net_process模块<label_net_process>`
+ - :ref:`路径处理函数<label_path_process>`
+
 
 .. code-block:: python
     :linenos:
@@ -299,23 +286,32 @@ NFU 直接输出结果以 32 位无符号整数表示，各字段含义如下：
         # 实例化网络
         SNN_net = MnistSNN()
         # 如果想要存入hdf5的参数，可用变量获取net_process的返回值，如 paras = net_process(...)
-        # 这里hdf5文件名经过路径校验后，会从"1.hdf5"变为"1_0.hdf5"
-        net_process(SNN_net,connection_path="./snn_data/connections.pkl",inputdata_path="./snn_data/inputspike.txt",output_file_path="./snn_data/1.hdf5")
+        # 为防止重复，指定的HDF5输出路径会进行校验检查，且路径中的文件名会自动添加一个后缀“_0”，故最终输出文件为“subnet_data_0.hdf5”
+        net_process(SNN_net,connection_path="./snn_data/connections.pkl",
+                            inputdata_path="./snn_data/inputspike.txt",
+                            output_file_path="./snn_data/subnet_data.hdf5")
 
     if __name__ == "__main__":
         main()
 
-从HDF5文件中加载参数并执行计算
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+(2) 从HDF5文件中加载参数并执行计算
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 下面演示了从HDF5文件及其他文件中读取数据，并调用NFU驱动执行计算的流程，主要包含以下两个步骤：
 
 1. 实例化 ``paras_process`` 类
 2. 调用类中的 ``execute_computing`` 函数执行计算
 
-输出脉冲说明
+**参考**
+
+输出脉冲说明：
  - 注意: 输出脉冲列表中的首个“1”表示存在输出，此为标志位，并非实际的输出脉冲，实际输出脉冲应从列表第二个元素开始计算；
  - 输出脉冲的格式: 一个输出脉冲数据共32位，其中0~13为物理神经元号，14~17为GNC号，17~31为时间步数。
+
+函数说明（点击跳转）：
+ - :ref:`paras_process类<label_paras_process>`
+ - :ref:`execute_computing函数<label_execute_computing>`
+
 
 .. code-block:: python
     :linenos:
@@ -328,14 +324,13 @@ NFU 直接输出结果以 32 位无符号整数表示，各字段含义如下：
         # 获取计算结果
         source_results = process.execute_computing(spikes_in_path="./snn_data/inputspike.txt",
                                                 neurondata_in_path="./snn_data/neuron.data",
-                                                subnetsandparas_in_path = "./snn_data/1_0.hdf5",
+                                                subnetsandparas_in_path = "./snn_data/subnet_data.hdf5",
                                                 subnet_num = 1)
         # 打印计算结果
         print(source_results)
         
     if __name__ == "__main__":
         main()
-
 
 三、搭建混合神经网络
 ======================

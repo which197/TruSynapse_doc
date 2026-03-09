@@ -1,4 +1,4 @@
-数据结构说明文档
+数据结构说明
 ================
 
 本部分提供详细的数据结构说明。
@@ -6,12 +6,20 @@
 HDF5文件接口相关数据结构
 -----------------------------
 
+.. _label_paras_process:
+
 (1) **paras_process** 类
 
 该类作为 HDF5 接口的核心功能载体，承担 HDF5 参数的写入与读取操作；同时完成 HDF5 参数、输入脉冲数据及神经元模型参数的整合与预处理，并将其转换为ctypes结构体 ``SNNData``，向下传递至 C 语言实现的 NFU 驱动模块。
 
+类内部函数说明（点击跳转） 
+
+ - :ref:`主要函数<label_parasprocess_Mfuncs>`
+ - :ref:`内部功能函数<label_path_process>`
+
+
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     class para_process:
         # 保存参数为HDF5格式
@@ -37,12 +45,12 @@ HDF5文件接口相关数据结构
 NFU驱动（C语言）相关数据结构
 ----------------------------
 
-(1) **SNNData** 
+(1) **SNNData** 类
 
 该类是一个基于 ``ctypes.Structure`` 构建的类，用于定义SNN计算所需的数据结构。这个结构体与C库中的对应定义保持一致，作为Python与C库之间的数据传输桥梁。
 
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     class SNNData(Structure):
         """SNN计算所需的数据结构，与C库中的定义对应"""
@@ -77,8 +85,12 @@ NFU驱动（C语言）相关数据结构
 
 该类是一个封装类，用于调用C共享库执行SNN计算。
 
+类内部函数说明（点击跳转） 
+
+ - :ref:`主要函数<label_SNNDriver_Mfuncs>`
+
 .. code-block:: bash
-    :linenos:
+    :class: wrap-code
 
     class SNNDriver:
         """SNN驱动封装类，用于调用C库函数"""
