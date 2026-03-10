@@ -11,13 +11,13 @@
 .. list-table::
     :align: center
 
-    * - 文件名
+    * - 示例名
       - 类型
       - 内容
     * - net
       - python对象
       - 神经网络结构
-    * - connection.pkl
+    * - connections.pkl
       -	| pickle生成的二进制文件
         | (也支持Pytorch的.pth文件)
       - 用户的SNN网络的权重文件
@@ -35,20 +35,20 @@
 .. list-table::
     :align: center
 
-    * - 示例文件路径
+    * - 示例文件名
       - 类型
       - 内容
-    * - ./snn_data/connections.pkl
+    * - connections.pkl
       -	| pickle生成的二进制文件
         | (也支持Pytorch的.pth文件)
       - 用户的SNN网络的权重文件
-    * - ./snn_data/inputspike.txt
+    * - inputspike.txt
       - 文本文件
       - 输入脉冲数据
-    * - ./snn_data/neuron.data
+    * - neuron.data
       - 数据文件
       - 神经元模型参数数据
-    * - ./snn_data/subnet_data_0.hdf5
+    * - subnet_data_0.hdf5
       - HDF5文件
       - 处理后的SNN网络参数
 
@@ -137,6 +137,11 @@
 
 由于类脑芯片只支持0，1两种状态的输入，因此需要将原始输入数据（如图像、文本等）转换为脉冲化格式，并以一维数组的形式进行保存。
 常用的方式包括率编码、时间编码等，具体方法取决于输入数据的特性和应用需求。也可以使用 ``snntorch.spikegen`` 中内置的编码器将其转换为脉冲序列。
+
+输入脉冲数据需存储为纯文本文件（.txt 格式），且需满足以下格式要求：
+ - 每行仅包含一个脉冲信号值（0 或 1），无任何标点符号、分隔符、空白字符；
+ - 文件首部、尾部均无空行，行内无前置 / 后置空格、制表符等无效字符；
+ - 文本编码采用 UTF-8，避免特殊字符导致解析异常。
 
 下面的脚本介绍了一种直接进行阈值判断将 MNIST 数据集中的图像转换为二值化格式的做法，最后输出的 ``inputdata.txt`` 文件作为后续输入直接加载和使用。
 
@@ -234,6 +239,7 @@
 
 
 
+.. _label_自有格式HDF5文件:
 
 五、自有格式HDF5 (subnet_data.hdf5)
 ----------------------------------------

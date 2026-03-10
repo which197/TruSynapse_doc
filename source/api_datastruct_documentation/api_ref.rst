@@ -432,19 +432,17 @@ API 文档
     输出:
     'SNNData': 实例化对象，为ctypes结构体，该ctypes结构体实现 Python 与 C 语言的内存数据互通，确保 Python 侧构造的SNNData实例，其内存布局及字段类型与 C 端 NFU 驱动中定义的SNNData结构体完全对齐，支持 Python 侧参数直接传递至 C 语言函数调用。
 
-.. _label_execute_computing:
+.. _label_files_input_compute:
 
-(5) **execute_computing** 使用输入的数据执行计算
+(5) **files_input_compute** 使用输入文件的数据计算
 
 .. code-block:: bash
     :class: wrap-code
 
-    execute_computing(self,
-                    spikes_in_path: str,
-                    neurondata_in_path: str,
-                    subnetsandparas_in_path: str,
-                    subnet_num: int = 1):
-    属于paras_process类
+    files_input_compute(spikes_in_path: str,
+                        neurondata_in_path: str,
+                        subnetsandparas_in_path: str,
+                        subnet_num: int = 1):
 
     功能:从指定的多个文件里读取数据，并使用这些数据执行计算，最终返回结果。该方法会调用parse_collect_to_struct方法构建结构体，也会调用SNNDriver类的execute方法执行计算。
     输入:
@@ -455,9 +453,22 @@ API 文档
     输出:
     'output_results': 列表，为NFU计算完的原始结果，需要处理，注意，输出脉冲列表中的首个“1”表示存在输出，此为标志位，并非实际的输出脉冲，实际输出脉冲应从列表第二个元素开始计算。
 
+(6) **obj_input_compute** 使用输入对象的数据计算
+
+.. code-block:: bash
+    :class: wrap-code
+
+    obj_input_compute(snndata: SNNData):
+
+    功能:从指定实例化的SNNData类里读取数据，并使用这些数据执行计算，最终返回结果。该方法会调用SNNDriver类的execute方法执行计算。
+    输入:
+    'snndata': SNNData对象，包含计算所需的所有数据。
+    输出:
+    'output_results': 列表，为NFU计算完的原始结果，需要处理，注意，输出脉冲列表中的首个“1”表示存在输出，此为标志位，并非实际的输出脉冲，实际输出脉冲应从列表第二个元素开始计算。
+
 .. _label_SNNDriver_Mfuncs:
 
-(6) **get_last_error** 获取上次的错误信息
+(7) **get_last_error** 获取上次的错误信息
 
 .. code-block:: bash
     :class: wrap-code
@@ -469,7 +480,7 @@ API 文档
     输出:
     处理后的错误信息字符串。
 
-(7) **execute** 使用输入数据执行计算
+(8) **execute** 使用输入数据执行计算
 
 .. code-block:: bash
     :class: wrap-code
@@ -483,7 +494,7 @@ API 文档
     输出:
     正常返回0，出错则抛出错误并终止。
 
-(8) **free_output** 释放内存
+(9) **free_output** 释放内存
 
 .. code-block:: bash
     :class: wrap-code

@@ -99,7 +99,7 @@
     connections = connection_input + connection_hidden1 + connection_output
 
 
-3. 准备输入脉冲（inputdata）
+3. 准备输入脉冲（inputspike）
 -----------------------------
 输入应为一维列表，元素为 0 或 1，长度等于输入层神经元数。
 
@@ -223,7 +223,7 @@ NFU 直接输出结果以 32 位无符号整数表示，各字段含义如下：
 
 1. 文件说明
 --------------
-需加载的文件说明，请参考 :ref:`数据准备(点击跳转)<label_InputFilesIntro>` 中的表格。
+需加载的文件说明，请参考 :ref:`数据准备<label_InputFilesIntro>` 中的表格。
 
 其中，HDF5的文件来源有两种，一种是调用本框架的 ``net_process`` 模块生成自有格式的HDF5文件；第二种是外源的HDF5文件经过工具函数转换后得到（待实现）。
 
@@ -249,7 +249,7 @@ NFU 直接输出结果以 32 位无符号整数表示，各字段含义如下：
 
 **参考**
 
-函数说明（点击跳转）：
+函数说明：
  - :ref:`net_process模块<label_net_process>`
  - :ref:`路径处理函数<label_path_process>`
 
@@ -300,7 +300,7 @@ NFU 直接输出结果以 32 位无符号整数表示，各字段含义如下：
 下面演示了从HDF5文件及其他文件中读取数据，并调用NFU驱动执行计算的流程，主要包含以下两个步骤：
 
 1. 实例化 ``paras_process`` 类
-2. 调用类中的 ``execute_computing`` 函数执行计算
+2. 调用类中的 ``XXX_input_compute`` 函数执行计算
 
 **参考**
 
@@ -308,29 +308,47 @@ NFU 直接输出结果以 32 位无符号整数表示，各字段含义如下：
  - 注意: 输出脉冲列表中的首个“1”表示存在输出，此为标志位，并非实际的输出脉冲，实际输出脉冲应从列表第二个元素开始计算；
  - 输出脉冲的格式: 一个输出脉冲数据共32位，其中0~13为物理神经元号，14~17为GNC号，17~31为时间步数。
 
-函数说明（点击跳转）：
+函数说明：
  - :ref:`paras_process类<label_paras_process>`
- - :ref:`execute_computing函数<label_execute_computing>`
+ - :ref:`XXX_input_compute函数<label_files_input_compute>`
 
 
 .. code-block:: python
     :linenos:
 
-    from net_to_run import paras_process
+    from net_to_run import paras_process, files_input_compute, obj_input_compute
     def main():
 
-        # 实例化参数处理类
-        process = paras_process()
-        # 从文件中解析参数并执行计算，获取计算结果
-        source_results = process.execute_computing(spikes_in_path="./snn_data/inputspike.txt",
+        #------------------------------方式一----------------------------------
+        # 从文件中解析参数并计算
+
+        # 解析文件内的数据，并开始计算
+        source_results = files_input_compute(spikes_in_path="./snn_data/inputspike.txt",
                                                 neurondata_in_path="./snn_data/neuron.data",
-                                                subnetsandparas_in_path = "./snn_data/subnet_data.hdf5",
+                                                subnetsandparas_in_path = "./snn_data/subnet_data_0.hdf5",
                                                 subnet_num = 1)
+        
+        #------------------------------方式二----------------------------------
+        # 从对象中解析参数并计算，需要自己构建SNNData对象 
+        
+        #实例化类
+        process = paras_process()
+        
+        # 构建SNNData对象，解析参数
+        snndata = process.parse_collect_to_struct(spikes_in_path="./snn_data/inputspike.txt",
+                                                neurondata_in_path="./snn_data/neuron.data",
+                                                subnetsandparas_in_path = "./snn_data/subnet_data_0.hdf5",
+                                                subnet_num = 1)
+        
+        # 输入对象并开始计算
+        source_results = obj_input_compute(snndata)
+        
         # 打印计算结果
         print(source_results)
         
     if __name__ == "__main__":
         main()
+
 
 三、搭建混合神经网络
 ======================
