@@ -843,6 +843,38 @@ _results_to_integer
     输出:
     'results' : 列表，处理后的脉冲列表，列表索引为时间步，元素内容整形数字，使用位掩码表示神经元发放状态，从右到左依次对应逻辑神经元 0, 1, 2...
 
+_results_to_spikeinteger
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: bash
+    :class: wrap-code
+
+    _results_to_spikeinteger(self, timestep_data: dict, total_timesteps: list) -> list[int] :
+    属于SpikeProcessor类
+
+    功能: 只记录已发放脉冲的时间步，且使用integer的形式转换。具体为，将输出结果转换为[输出层神经元发放掩码(无位数限制) + 发放时间步(低15位)]的形式。
+    输入:
+    'timestep_data' : 字典，以时间步为单位的所有神经元的脉冲数据。
+    'total_timesteps' : 列表，需要转换的时间步列表，range格式[起始时间步，终止时间步]
+    输出:
+    'results' : 列表，处理后的脉冲列表，列表元素格式为[输出层神经元发放掩码(无位数限制) + 发放时间步(低15位)]
+
+_results_to_spikedict
+^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: bash
+    :class: wrap-code
+
+    _results_to_spikedict(self, timestep_data: dict, total_timesteps: list) -> dict :
+    属于SpikeProcessor类
+
+    功能: 只记录已发放脉冲的时间步，且使用integer的形式转换，但是采用dict的形式记录结果。具体为，将输出结果转换为{'发放时间步': '输出层神经元发放掩码'}的字典形式。
+    输入:
+    'timestep_data' : 字典，以时间步为单位的所有神经元的脉冲数据。
+    'total_timesteps' : 列表，需要转换的时间步列表，range格式[起始时间步，终止时间步]
+    输出:
+    'results' : 字典，处理后的脉冲字典，具体为{'发放时间步': '输出层神经元发放掩码'}的字典形式。
+
 process_spikes
 ^^^^^^^^^^^^^^
 
@@ -852,9 +884,9 @@ process_spikes
     process_spikes(self, input_data: list[int], mode: str = 'integer') :
     属于SpikeProcessor类
 
-    功能: 将原始输出脉冲列表转换为易处理的字符串或整型数字的形式。该函数会调用内部功能函数 _results_to_strings 或 _results_to_integer，进行转换。
+    功能: 将原始输出脉冲列表转换为易处理的字符串或整型数字的形式。该函数会调用内部功能函数 _results_to_strings等进行转换。
     输入:
     'input_data' : 列表，原始脉冲输出数据。
-    'mode' : 字符串，转换模式，为'integer'或'string'，分别表示转换为整型数字或字符串，默认整型模式。
+    'mode' : 字符串，转换模式，为'integer'、'string'、'spikeinteger'、'spikedict'，分别表示转换为整型数字、字符串、脉冲整型数字、脉冲字典，默认整型模式。
     输出:
-    'results' : 列表，处理后的脉冲列表，列表索引为时间步，元素内容表示神经元发放的情况。
+    'results' : 列表/字典，处理后的脉冲数据，不同模式数据结构不一样。

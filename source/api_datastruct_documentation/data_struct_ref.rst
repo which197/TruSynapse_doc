@@ -68,6 +68,10 @@ HDF5文件接口相关数据结构
         def _results_to_strings(self, timestep_data: dict, total_timesteps: list) -> list[str]:
         # 将输出结果转换为整形列表        
         def _results_to_integer(self, timestep_data: dict, total_timesteps: list) -> list[int]:
+        # 将输出结果转换为脉冲整形列表格式
+        def _results_to_spikeinteger(self, timestep_data: dict, total_timesteps: list) -> list[int]:
+        # 将输出结果转换为脉冲字典格式        
+        def _results_to_spikedict(self, timestep_data: dict, total_timesteps: list) -> dict:
         # 处理输出脉冲
         def process_spikes(self, input_data: list[int], mode: str = 'integer') :
 
